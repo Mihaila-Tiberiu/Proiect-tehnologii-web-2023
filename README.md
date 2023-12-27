@@ -5,11 +5,18 @@ Structura bazelor de date:
 
     Tabela profesori: Stochează informații despre profesori.
     Tabela studenti: Conține date despre studenți.
-    Tabela proiect: Păstrează detalii despre proiecte.
+    Tabela proiect: Păstrează detalii despre proiecte. 
     Tabela livrabil: Menține informații legate de livrabilele proiectelor.
-    Tabela review: Stocarea recenziilor sau a notelor asociate proiectelor.
+    Tabela recenzie: Stocarea recenziilor sau a notelor asociate proiectelor.
+
+Relații tabele:
+    `Studenti - MP ai mai multor proiecte, jurati ai mai multor proiecte, mai multe reviews`
+    `Proiect - are mai multe reviews, mai multi MP, mai multi jurati, mai multe livrabile, mai multe reviews`
+    `Livrabil - apartine unui singur proiect, un proiect poate avea mai multe livrabile`
+    `Recenzie - apartine unui singur proiect, un proiect poate avea mai multe recenzii`
 
 Metodele Backend:
+
 Pentru utilizatorii nelogati:
 
     > createUserStudent(): Pentru a crea un cont pentru un student.
@@ -31,11 +38,12 @@ Triggere și funcționalități speciale:
     > chooseChiefMemberOfJury(): Desemnarea unui membru al juriului ca și "membru sef".
     > chooseJurors(): Alegerea juraților pentru un proiect, eventual la apropierea deadline-ului.
 
-Funcționalități specifice membrului sef al juriului:
+Funcționalități specifice membrului șef al juriului:
+
     > addOthersReview(): Adăugarea recenziilor pentru alți membri ai juriului.
     > editOthersReview(): Editarea recenziilor altor membri ai juriului.
 
 Pentru utilizatorii logati ca profesor:
 
-    >  getProjects(): Obținerea informațiilor despre proiecte.
+    > getProjects(): Obținerea informațiilor despre proiecte.
     > getReviewsForProject(): Obținerea recenziilor asociate unui proiect.
