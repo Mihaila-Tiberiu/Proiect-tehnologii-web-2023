@@ -9,11 +9,11 @@ Structura bazelor de date:
     Tabela livrabil: Menține informații legate de livrabilele proiectelor.
     Tabela recenzie: Stocarea recenziilor sau a notelor asociate proiectelor.
 
-Relații tabele:
-    `Studenti - MP ai mai multor proiecte, jurati ai mai multor proiecte, mai multe reviews`
-    `Proiect - are mai multe reviews, mai multi MP, mai multi jurati, mai multe livrabile, mai multe reviews`
-    `Livrabil - apartine unui singur proiect, un proiect poate avea mai multe livrabile`
-    `Recenzie - apartine unui singur proiect, un proiect poate avea mai multe recenzii`
+Relații tabele: <br>
+    `Studenti - MP ai mai multor proiecte, jurati ai mai multor proiecte, mai multe reviews` <br>
+    `Proiect - are mai multe reviews, mai multi MP, mai multi jurati, mai multe livrabile, mai multe reviews` <br>
+    `Livrabil - apartine unui singur proiect, un proiect poate avea mai multe livrabile` <br>
+    `Recenzie - apartine unui singur proiect, un proiect poate avea mai multe recenzii` <br>
 
 Metodele Backend:
 
