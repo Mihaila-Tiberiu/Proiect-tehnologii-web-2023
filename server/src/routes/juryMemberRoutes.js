@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const db = require('../../database');
+
 // Route to choose chief member of jury
 router.put('/chooseChiefMemberOfJury/:projectId', (req, res) => {
   // Logic to choose chief member of jury

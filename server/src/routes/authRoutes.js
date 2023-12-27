@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const db = require('../../database');
+
 // Route to create a new student account
 router.post('/createUserStudent', (req, res) => {
   // Logic to create a student account
