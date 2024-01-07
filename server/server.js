@@ -16,6 +16,12 @@ const studentRoutes = require('./src/routes/studentRoutes.js');
 const juryMemberRoutes = require('./src/routes/juryMemberRoutes.js');
 const professorRoutes = require('./src/routes/professorRoutes.js');
 
+// Use the route files
+app.use('/auth', authRoutes);
+app.use('/students', studentRoutes);
+app.use('/jury', juryMemberRoutes);
+app.use('/professors', professorRoutes);
+
 const PORT = process.env.PORT || 5000; // port
 
 app.listen(PORT, () => {

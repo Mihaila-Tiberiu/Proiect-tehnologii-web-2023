@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+
+import RegisterAsProf from './components/register/RegisterAsProf';
+import RegisterAsStudent from './components/register/RegisterAsStudent';
+
+import ProfDashboard from './components/dashboard/ProfDashboard';
+import StudentDashboard from './components/dashboard/StudentDashboard';
+
+import Login from './components/login/Login';
+import LoginAsProf from './components/login/LoginAsProf';
+import LoginAsStudent from './components/login/LoginAsStudent';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login/>} />
+        <Route path="/login/professor" element={<LoginAsProf/>} />
+        <Route path="/login/student" element={<LoginAsStudent/>} />
+        <Route path="/register/prof" element={<RegisterAsProf/>} />
+        <Route path="/register/student" element={<RegisterAsStudent/>} />
+        <Route path="/prof-dashboard" element={<ProfDashboard/>} />
+        <Route path="/student-dashboard" element={<StudentDashboard/>} />
+        </Routes>
+    </Router>
   );
 }
 
