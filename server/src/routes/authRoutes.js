@@ -39,13 +39,13 @@ router.post('/createUserProf', (req, res) => {
 
 // Route to login a student
 router.post('/loginStudent', (req, res) => {
-  const { Nume, Prenume, Parola } = req.body;
+  const { StudentID, Nume, Prenume, Parola } = req.body;
   db.get(
-    'SELECT * FROM Studenti WHERE Nume = ? AND Prenume = ? AND Parola = ?',
-    [Nume, Prenume, Parola],
+    'SELECT * FROM Studenti WHERE StudentID = ? AND Nume = ? AND Prenume = ? AND Parola = ?',
+    [StudentID, Nume, Prenume, Parola],
     (err, row) => {
       if (err) {
-        return res.status(500).json({ message: 'Failed to log in student', error: err.message });
+        return res.status(500).json({ message: 'Failed to log in student' });
       }
       if (!row) {
         return res.status(401).json({ message: 'Invalid credentials' });
@@ -57,10 +57,10 @@ router.post('/loginStudent', (req, res) => {
 
 // Route to login a professor
 router.post('/loginProf', (req, res) => {
-  const { Nume, Prenume, Parola } = req.body;
+  const { ProfesorID, Nume, Prenume, Parola } = req.body;
   db.get(
-    'SELECT * FROM Profesori WHERE Nume = ? AND Prenume = ? AND Parola = ?',
-    [Nume, Prenume, Parola],
+    'SELECT * FROM Profesori WHERE ProfesorID = ? AND Nume = ? AND Prenume = ? AND Parola = ?',
+    [ProfesorID, Nume, Prenume, Parola],
     (err, row) => {
       if (err) {
         return res.status(500).json({ message: 'Failed to log in professor', error: err.message });

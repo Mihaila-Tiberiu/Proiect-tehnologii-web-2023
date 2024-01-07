@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import config from '../../config';
 
 const RegisterAsProf = () => {
   const [formData, setFormData] = useState({
@@ -23,7 +24,7 @@ const RegisterAsProf = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/auth/createUserProf", formData);
+      const response = await axios.post(config.REACT_APP_BACKEND_URL+"/auth/createUserProf", formData);
       console.log('Registration Successful:', response.data);
     } catch (error) {
       console.error('Registration Failed:', error);

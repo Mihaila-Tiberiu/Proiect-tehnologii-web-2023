@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import config from '../../config';
 
 const RegisterAsStudent = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +26,7 @@ const RegisterAsStudent = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/auth/createUserStudent", formData);
+      const response = await axios.post(config.REACT_APP_BACKEND_URL+"/auth/createUserStudent", formData);
       console.log('Registration Successful:', response.data);
     } catch (error) {
       console.error('Registration Failed:', error);

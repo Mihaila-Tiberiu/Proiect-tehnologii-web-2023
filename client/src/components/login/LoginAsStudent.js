@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import config from '../../config';
+import { useNavigate } from 'react-router-dom';
 
 const LoginAsStudent = () => {
   const [formData, setFormData] = useState({
+    StudentID: '',
     Prenume: '',
     Nume: '',
     Parola: '',
   });
 
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,12 +26,13 @@ const LoginAsStudent = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/auth/loginStudent", formData);
-      const { token } = response.data;
+      const response = await axios.post(config.REACT_APP_BACKEND_URL + "/auth/loginStudent", formData);
       // Set the token in Cookies upon successful login
-      // Cookies.set('studentToken', token, { expires: 1, path: '/' });
       console.log('Login Successful:', response.data);
+      document.cookie = `StudentID=${formData.StudentID}; path=/`;
+
       // Redirect to StudentDashboard upon successful login
+      navigate('/student-dashboard');
     } catch (error) {
       console.error('Login Failed:', error);
       setErrorMessage('Login failed. Please try again.'); // Set error message state
@@ -37,7 +41,7 @@ const LoginAsStudent = () => {
 
   return (
     <div className="container mt-5">
-      <h2>Logare Student</h2>
+      <h2>Student Login</h2>
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
         {/* Input fields for login */}
@@ -83,8 +87,22 @@ const LoginAsStudent = () => {
             required
           />
         </div>
+        <div className="mb-3">
+          <label htmlFor="StudentID" className="form-label">
+            Student ID
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="StudentID"
+            name="StudentID"
+            value={formData.StudentID}
+            onChange={handleChange}
+            required
+          />
+        </div>
         <button type="submit" className="btn btn-primary">
-          Logare
+          Login
         </button>
       </form>
     </div>

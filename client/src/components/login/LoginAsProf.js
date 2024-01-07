@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import config from '../../config';
+import { useNavigate } from 'react-router-dom';
 
 const LoginAsProf = () => {
   const [formData, setFormData] = useState({
+    ProfesorID: '',
     Prenume: '',
     Nume: '',
     Parola: '',
   });
 
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,11 +27,13 @@ const LoginAsProf = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/auth/loginProf", formData);
-      const { token } = response.data;
-      // Cookies.set('professorToken', token, { expires: 1, path: '/' });
+      const response = await axios.post(config.REACT_APP_BACKEND_URL + "/auth/loginProf", formData);
+      // Set the token in Cookies upon successful login
       console.log('Login Successful:', response.data);
+      document.cookie = `ProfesorID=${formData.ProfesorID}; path=/`;
+
       // Redirect to ProfDashboard upon successful login
+      navigate('/prof-dashboard');
     } catch (error) {
       console.error('Login Failed:', error);
       setErrorMessage('Login failed. Please try again.'); // Set error message state
@@ -78,6 +84,20 @@ const LoginAsProf = () => {
             id="Parola"
             name="Parola"
             value={formData.Parola}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="ProfesorID" className="form-label">
+            Professor ID
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="ProfesorID"
+            name="ProfesorID"
+            value={formData.ProfesorID}
             onChange={handleChange}
             required
           />
