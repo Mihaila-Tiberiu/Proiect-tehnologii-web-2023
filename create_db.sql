@@ -19,8 +19,8 @@ CREATE TABLE Proiect (
     ProiectID INTEGER PRIMARY KEY AUTOINCREMENT,
     NumeProiect TEXT NOT NULL,
     Descriere TEXT,
-    NotaProiect DECIMAL(5, 2) CHECK (NotaProiect >= 1 AND NotaProiect <= 10),
-    JuratSefID INTEGER REFERENCES Studenti(StudentID)
+    NotaProiect DECIMAL(5, 2) CHECK (NotaProiect >= 1 AND NotaProiect <= 10)
+    --JuratSefID INTEGER REFERENCES Studenti(StudentID)
 );
 
 -- Tabela pentru asocierea studentilor cu proiectele ca MP (Membri ai Proiectului)

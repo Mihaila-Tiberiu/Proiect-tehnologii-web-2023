@@ -1,12 +1,16 @@
-const sqlite3 = require('sqlite3').verbose();
+import { Sequelize } from "sequelize";
+import env from "dotenv";
 
-// Conectare sqlite
-const db = new sqlite3.Database('database.db', (err) => {
-  if (err) {
-    console.error(err.message);
-  } else {
-    console.log('Conectat la baza de date sqlite.');
-  }
-});
+env.config();
 
-module.exports = db;
+const db = new Sequelize({
+    dialect: 'sqlite',
+    database: process.env.DB_DATABASE,
+    logging: false,
+    define: {
+        timestamps: false,
+        freezeTableName: true
+    }
+})
+
+export default db;
