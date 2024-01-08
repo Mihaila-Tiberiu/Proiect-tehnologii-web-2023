@@ -46,6 +46,7 @@ CREATE TABLE Livrabil (
     NumeLivrabil TEXT NOT NULL,
     VideoDemonstrativ TEXT,
     LinkServer TEXT,
+    Deadline TEXT,
     UNIQUE(ProiectID, NumeLivrabil)
 );
 
