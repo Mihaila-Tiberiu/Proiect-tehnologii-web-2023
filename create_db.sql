@@ -32,11 +32,11 @@ CREATE TABLE StudentiProiectMP (
 );
 
 -- Tabela pentru asocierea studentilor cu proiectele ca jurati
-CREATE TABLE StudentiProiectJurati (
+CREATE TABLE StudentiLivrabilJurati (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     StudentID INTEGER REFERENCES Studenti(StudentID),
-    ProiectID INTEGER REFERENCES Proiect(ProiectID),
-    UNIQUE(StudentID, ProiectID)
+    LivrabilID INTEGER REFERENCES Livrabil(LivrabilID),
+    UNIQUE(StudentID, LivrabilID)
 );
 
 -- Tabela pentru livrabile
@@ -53,10 +53,10 @@ CREATE TABLE Livrabil (
 -- Tabela pentru recenzii
 CREATE TABLE Recenzie (
     RecenzieID INTEGER PRIMARY KEY AUTOINCREMENT,
-    ProiectID INTEGER REFERENCES Proiect(ProiectID),
+    LivrabilID INTEGER REFERENCES Livrabil(LivrabilID),
     StudentID INTEGER REFERENCES Studenti(StudentID),
     Nota DECIMAL(5, 2) CHECK (Nota >= 1 AND Nota <= 10),
     ReviewText TEXT,
-    UNIQUE(ProiectID, StudentID)
+    UNIQUE(LivrabilID, StudentID)
 );
 
