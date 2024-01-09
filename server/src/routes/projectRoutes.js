@@ -13,9 +13,9 @@ studentRouter.route('/allProjects').get(async (req, res) => {
 })
 
 // // Route to join an existing project
-// router.post('/joinProject', (req, res) => {
-//   // Logic to join an existing project
-// });
+studentRouter.post('/joinProject', (req, res) => {
+  // Logic to join an existing project
+});
 
 // // Route to edit project details
 // router.put('/editProject/:projectId', (req, res) => {

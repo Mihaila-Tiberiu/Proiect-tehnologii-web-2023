@@ -28,8 +28,6 @@ async function createDatabase(){
       }
 }
 
-
-
 function fk_Config(){
       Proiect.hasMany(Livrabil, {as: AliasLivrabil, foreignKey: "ProiectID"}); //un proiect are mai multe livrabile
       Livrabil.hasOne(Recenzie, {as: AliasRecenzie, foreignKey: "LivrabilID"}); //o recenzie are un livrabil

@@ -1,34 +1,24 @@
 import Proiect from "../entities/Proiect.js";
 import Studenti from "../entities/Studenti.js";
-import { AliasStudenti } from "../entities/databaseConsts.js";
+import { AliasLivrabil, AliasStudenti } from "../entities/databaseConsts.js";
 import db from "../../database.js";
+import Livrabil from "../entities/Livrabil.js";
 
 async function createProiect(proiect){
-    return await Proiect.create(proiect, {include: [{model: Studenti, as: AliasStudenti}]});
+    return await Proiect.create(proiect, {include: [
+        {model: Studenti, as: AliasStudenti},
+        {model: Livrabil, as: AliasLivrabil}
+    ]});
     
 }
 
-// async function createProiect(proiect) {
-//     try {
-//         const createdProiect = await Proiect.create(proiect);
-        
-//         // Check if there are associated students
-//         if (proiect.AliasStudenti && proiect.AliasStudenti.length > 0) {
-//             // Create associated students and link them to the created project
-//             await Studenti.bulkCreate(proiect.AliasStudenti.map(student => ({ ...student, ProiectID: createdProiect.ProiectID })));
-//         }
-
-//         return createdProiect;
-//     } catch (error) {
-//         console.error('Error creating Proiect:', error);
-//         throw error;
-//     }
-// }
-
-
-async function getProiecte(){
-    console.log("se iau toate proiectele");
-    return await Proiect.findAll({include: [AliasStudenti]});
+async function getProiecte() {
+    return await Proiect.findAll({
+        include: [
+            { model: Studenti, as: AliasStudenti },
+            { model: Livrabil, as: AliasLivrabil }
+        ]
+    });
 }
 
 async function getProiecteById(id){
