@@ -1,5 +1,5 @@
 const config = {
-    REACT_APP_BACKEND_URL: 'http://localhost:5000',
+    REACT_APP_BACKEND_URL: 'http://localhost:8080',
     //
   };
   

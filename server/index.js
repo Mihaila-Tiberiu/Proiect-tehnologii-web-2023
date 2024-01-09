@@ -35,7 +35,7 @@ app.use('/professors', profRouter);
 app.use('/api', masterRoute);
 app.use('/students', projectRoutes);
 
-const PORT = process.env.PORT || 8000; // port
+const PORT = process.env.PORT || 8080; // port
 
 app.listen(PORT, () => {
   console.log(`Serverul functioneaza pe port-ul ${PORT}.`);

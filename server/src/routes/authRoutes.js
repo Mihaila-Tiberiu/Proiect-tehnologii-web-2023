@@ -1,8 +1,10 @@
 import express from "express";
 import { createStudent } from "../dataAccess/StudentiDA.js";
 import { createProfesor } from "../dataAccess/ProfesoriDA.js";
+import sqlite3 from "sqlite3";
 
 const authRouter = express.Router();
+const db = new sqlite3.Database('database.sqlite'); // Adjust the database name and path as needed
 
 // Route to create a student account
 authRouter.route('/createUserStudent').post(async (req, res) => {
