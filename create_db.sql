@@ -11,7 +11,8 @@ CREATE TABLE Studenti (
     StudentID INTEGER PRIMARY KEY AUTOINCREMENT,
     Nume TEXT NOT NULL,
     Prenume TEXT NOT NULL,
-    Parola TEXT NOT NULL
+    Parola TEXT NOT NULL,
+    ProiectID INTEGER REFERENCES Proiect(ProiectID)
 );
 
 -- Tabela pentru proiecte
@@ -47,6 +48,7 @@ CREATE TABLE Livrabil (
     VideoDemonstrativ TEXT,
     LinkServer TEXT,
     Deadline TEXT,
+    RecenzieID INTEGER REFERENCES Recenzie(RecenzieID),
     UNIQUE(ProiectID, NumeLivrabil)
 );
 
