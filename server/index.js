@@ -8,15 +8,10 @@ import profRouter from "./src/routes/professorRoutes.js";
 
 const app = express();
 
-const corsOptions = {
-  origin: 'http://localhost:8080',
-  methods: 'GET,PUT,PATCH,POST,DELETE'
-};
-
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors(corsOptions));
+app.use(cors());
 
 
 // ROUTES

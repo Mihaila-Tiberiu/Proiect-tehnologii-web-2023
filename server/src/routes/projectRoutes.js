@@ -13,11 +13,12 @@ projectRoutes.route('/allProjects').get(async (req, res) => {
     return res.json(await getProiecte());
 })
 
-// // // Route to join an existing project
-// projectRoutes.post('/joinProject', (req, res) => {
-//   // Logic to join an existing project
+// // Route to join an existing project
+projectRoutes.post('/joinProject', (req, res) => {
+  // Logic to join an existing project
+  //primesc in body idstud si idproj
 
-// });
+});
 
 // Route to edit project details
 projectRoutes.route('/editProject/:projectId').put(async (req, res) => {
@@ -39,6 +40,7 @@ projectRoutes.route('/editDeliverable/:deliverableId').put(async (req, res) => {
 // // Route to add personal review
 // router.post('/addOwnReview/:projectId', (req, res) => {
 //   // Logic to add personal review
+      //
 // });
 
 export default projectRoutes;
