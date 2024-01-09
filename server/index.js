@@ -2,8 +2,9 @@ import express from "express";
 import cors from "cors";
 import masterRoute from "./src/routes/masterRoute.js";
 import db_init from "./src/entities/databaseInit.js";
-import studentRouter from "./src/routes/projectRoutes.js";
+import projectRoutes from "./src/routes/projectRoutes.js";
 import authRouter from "./src/routes/authRoutes.js";
+import profRouter from "./src/routes/professorRoutes.js";
 
 const app = express();
 
@@ -24,16 +25,15 @@ app.use(cors(corsOptions));
 // const professorRoutes = require('./src/routes/professorRoutes.js');
 // const { default: router } = require('./src/routes/masterRoute.js');
 
-// // Use the route files
- app.use('/auth', authRouter);
-// app.use('/students', studentRoutes);
-// app.use('/jury', juryMemberRoutes);
-// app.use('/professors', professorRoutes);
-
 db_init();
 
+// // Use the route files
+app.use('/auth', authRouter);
+// app.use('/students', studentRoutes);
+// app.use('/jury', juryMemberRoutes);
+app.use('/professors', profRouter);
 app.use('/api', masterRoute);
-app.use('/students', studentRouter);
+app.use('/students', projectRoutes);
 
 const PORT = process.env.PORT || 8000; // port
 

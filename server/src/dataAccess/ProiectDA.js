@@ -36,49 +36,49 @@ async function deleteProiect(id){
 }
 
 async function updateProiect(proiect, id){
-    const proj = Proiect.getProiecteById(proiect.ProiectID);
+    const proj = await getProiecteById(id);
 
     if(!proj){
         console.log("this elem does not exist");
+        console.log(proj);
         return;
     }
 
     const t = await db.transaction();
-
     try{
         await proj.update(proiect);
 
         const existaStudenti = await Studenti.findAll({
             where: {
-                ProiectID: proiect.ProiectID,
+                ProiectID: id,
             },
         });
 
-        if(existaStudenti.length > 0){
-            let studentiIds = existaStudenti.map(a => a.dataValues.StudentID);
-            let studentiIdsDeleted = studentiIds.filter(id => !proiect.AliasStudenti.find(add => add.StudentID === id)?.StudentID);
+        // if(existaStudenti.length > 0){
+        //     let studentiIds = existaStudenti.map(a => a.dataValues.StudentID);
+        //     let studentiIdsDeleted = studentiIds.filter(id => !proiect.AliasStudenti.find(add => add.StudentID === id)?.StudentID);
 
-            if(studentiIdsDeleted.length > 0){
-                await Studenti.destroy({
-                    where: {
-                        StudentID: studentiIdsDeleted,
-                    },
-                });
-            }
-        }
+        //     if(studentiIdsDeleted.length > 0){
+        //         await Studenti.destroy({
+        //             where: {
+        //                 StudentID: studentiIdsDeleted,
+        //             },
+        //         });
+        //     }
+        // }
 
-        const insertedS = proiect.AliasStudenti.filter(a => a.StudentID === 0);
-        if(insertedS.length > 0){
-             await Studenti.bulkCreate(insertedS);
-        }
+        // const insertedS = proiect.A.filter(a => a.StudentID === 0);
+        // if(insertedS.length > 0){
+        //      await Studenti.bulkCreate(insertedS);
+        // }
 
-        const updatedS = proiect.AliasStudenti.filter(a => a.StudentID !== 0);
-        if(updatedS.length > 0){
-            for(let item of updatedS){
-                const findS = await Studenti.findByPk(item.StudentID);
-                await findS?.update(item);
-            }
-        }
+        // const updatedS = proiect.AliasStudenti.filter(a => a.StudentID !== 0);
+        // if(updatedS.length > 0){
+        //     for(let item of updatedS){
+        //         const findS = await Studenti.findByPk(item.StudentID);
+        //         await findS?.update(item);
+        //     }
+        // }
 
         await t.commit();
     }catch(e){

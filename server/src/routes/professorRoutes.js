@@ -1,16 +1,18 @@
-// const express = require('express');
-// const router = express.Router();
+import express from "express";
+import { getProiecte } from "../dataAccess/ProiectDA.js";
+import { getRecenzieByLivrabilID } from "../dataAccess/RecenzieDA.js";
 
-// const db = require('../../database');
+const profRouter = express.Router();
 
-// // Route to get project information
-// router.get('/getProjects', (req, res) => {
-//   // Logic to get project information
-// });
+// Route to get project information
+profRouter.route('/getProjects').get(async (req, res) => {
+    return res.json(await getProiecte());
+});
 
-// // Route to get reviews for a project
-// router.get('/getReviewsForProject/:projectId', (req, res) => {
-//   // Logic to get reviews for a project
-// });
+// Route to get reviews for a project
+profRouter.route('/getReviewsForProject/:projectId').get(async (req, res) => {
+    let id = parseInt(req.params.projectId);
+    return res.json(await getRecenzieByLivrabilID(id));
+});
 
-// module.exports = router;
+export default profRouter;
