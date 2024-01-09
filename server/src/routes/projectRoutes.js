@@ -1,5 +1,6 @@
 import express from "express";
 import { createProiect, getProiecte, updateProiect } from "../dataAccess/ProiectDA.js";
+import { updateLivrabil } from "../dataAccess/LivrabilDa.js";
 
 const projectRoutes = express.Router();
 
@@ -12,11 +13,11 @@ projectRoutes.route('/allProjects').get(async (req, res) => {
     return res.json(await getProiecte());
 })
 
-// // Route to join an existing project
-projectRoutes.post('/joinProject', (req, res) => {
-  // Logic to join an existing project
+// // // Route to join an existing project
+// projectRoutes.post('/joinProject', (req, res) => {
+//   // Logic to join an existing project
 
-});
+// });
 
 // Route to edit project details
 projectRoutes.route('/editProject/:projectId').put(async (req, res) => {
@@ -29,10 +30,11 @@ projectRoutes.post('/addDeliverable/:projectId', (req, res) => {
   // Logic to add deliverables to a project
 });
 
-// // Route to edit deliverable details
-// router.put('/editDeliverable/:deliverableId', (req, res) => {
-//   // Logic to edit deliverable details
-// });
+// Route to edit deliverable details
+projectRoutes.route('/editDeliverable/:deliverableId').put(async (req, res) => {
+  let id = parseInt(req.params.deliverableId);
+  return res.json(await updateLivrabil(req.body, id));
+});
 
 // // Route to add personal review
 // router.post('/addOwnReview/:projectId', (req, res) => {

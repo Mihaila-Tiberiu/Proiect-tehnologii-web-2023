@@ -40,7 +40,6 @@ async function updateProiect(proiect, id){
 
     if(!proj){
         console.log("this elem does not exist");
-        console.log(proj);
         return;
     }
 
