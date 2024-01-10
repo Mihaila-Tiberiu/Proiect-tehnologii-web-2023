@@ -1,5 +1,4 @@
 import express from "express";
-import db from "../../database.js";
 import { chooseJury } from "../dataAccess/StudentiDA.js";
 
 const juryMemberRoutes = express.Router();
@@ -11,7 +10,6 @@ juryMemberRoutes.route('/chooseChiefMemberOfJury/:projectId').put(async (req, re
 
 // Route to choose jurors for a project
 juryMemberRoutes.route('/chooseJurors/:projectId').put(async (req, res) => {
-  // Logic to choose jurors for a project
   return res.json(await chooseJury(req.params.projectId));
 });
 

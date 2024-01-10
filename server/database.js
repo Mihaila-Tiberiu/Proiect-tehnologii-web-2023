@@ -5,8 +5,8 @@ env.config();
 
 const db = new Sequelize({
     dialect: 'sqlite',
-    host: process.env.DB_DATABASE,
-    //Storage: process.env.DB_DATABASE,
+    host: process.env.DB_DATABASE, // sa se conecteze la baza pe care o avem
+    //Storage: process.env.DB_DATABASE, //ca sa cream o baza de date noua - alt fisier
     logging: false,
     define: {
         timestamps: false,
@@ -16,12 +16,3 @@ const db = new Sequelize({
 console.log(process.env.DB_DATABASE);
 
 export default db;
-
-// // Conectare sqlite
-// const db = new sqlite3.Database('database.db', (err) => {
-//     if (err) {
-//       console.error(err.message);
-//     } else {
-//       console.log('Conectat la baza de date sqlite.');
-//     }
-//   });

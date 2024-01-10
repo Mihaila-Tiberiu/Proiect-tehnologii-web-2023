@@ -33,6 +33,11 @@ const Livrabil = db.define("Livrabil",{
     {
         type: Sequelize.STRING,
         allowNull: true
+    },
+    StudentID:
+    {
+        type: Sequelize.INTEGER,
+        allowNull: true
     }
 }, {tableName:"Livrabil"});
 

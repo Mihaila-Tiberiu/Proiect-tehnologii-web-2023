@@ -30,8 +30,11 @@ function fk_Config(){
       Proiect.hasMany(Livrabil, {as: AliasLivrabil, foreignKey: "ProiectID"}); //un proiect are mai multe livrabile
       Proiect.hasMany(Studenti, {as: AliasStudenti, foreignKey: "ProiectID"});
       Studenti.belongsTo(Proiect, {as: AliasProiect, foreignKey: "ProiectID"});
+      Studenti.belongsToMany(Livrabil, {as: AliasLivrabil, as: "StudentID"});
       Recenzie.belongsTo(Studenti, { as: AliasRecenzie, foreignKey: "StudentID" })  //o recenzie are un student
       Livrabil.hasMany(Recenzie, {as: AliasRecenzie, foreignKey: "LivrabilID"});
+      // Livrabil.hasMany(Studenti, {as: AliasStudenti, foreignKey: "StudentID"});
+
 }
 
 async function db_init() {

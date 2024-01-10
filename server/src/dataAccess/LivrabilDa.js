@@ -2,7 +2,8 @@ import db from "../../database.js";
 import Livrabil from "../entities/Livrabil.js";
 import Proiect from "../entities/Proiect.js";
 import Recenzie from "../entities/Recenzie.js";
-import { AliasRecenzie } from "../entities/databaseConsts.js";
+import Studenti from "../entities/Studenti.js";
+import { AliasRecenzie, AliasStudentiJur } from "../entities/databaseConsts.js";
 import { getProiecteById } from "./ProiectDA.js";
 
 async function createLivrabil(livrabil, id){
@@ -25,6 +26,7 @@ async function createLivrabil(livrabil, id){
 async function getLivrabile(){
     return await Livrabil.findAll({
         include: [
+            {model: Studenti, as: AliasStudentiJur},
             {model: Recenzie, as: AliasRecenzie}
         ]
     });
@@ -33,6 +35,7 @@ async function getLivrabile(){
 async function getLivrabileById(id) {
     return await Livrabil.findByPk(id, {
         include: [
+            {model: Studenti, as: AliasStudentiJur},
             {model: Recenzie, as: AliasRecenzie}
         ]
     });
