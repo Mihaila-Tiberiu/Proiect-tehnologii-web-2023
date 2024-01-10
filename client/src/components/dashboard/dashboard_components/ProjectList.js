@@ -2,20 +2,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './ProjectList.css';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import config from '../../../config';
 
 const ProjectList = () => {
-    // State to manage form inputs
-    const [newProject, setNewProject] = React.useState({
-      projectName: '',
-      projectDescription: '',
-      projectNota: '',
-    });
+  const [projects, setProjects] = useState([]);
+  const [newProject, setNewProject] = useState({
+    projectName: '',
+    projectDescription: '',
+    projectNota: '',
+  });
   
-    const projects = [
-      { ProiectID: 1, NumeProiect: 'Project 1', Descriere: 'Description for Project 1', NotaProiect: 5, IconitaProiect: 0 },
-      { ProiectID: 2, NumeProiect: 'Project 2', Descriere: 'Description for Project 2', NotaProiect: 10, IconitaProiect: 1 },
-      { ProiectID: 3, NumeProiect: 'Project 3', Descriere: 'Description for Project 3', NotaProiect: 9, IconitaProiect: 2 },
-    ];
+    useEffect(() => {
+      const fetchProjects = async () => {
+        try {
+          const response = await axios.get(`${config.REACT_APP_BACKEND_URL}/students/allProjects`);
+          setProjects(response.data);
+        } catch (error) {
+          console.error('Error fetching projects:', error);
+        }
+      };
+  
+      fetchProjects();
+    }, []);
   
     const getIconEmoji = (iconitaProiect) => {
       switch (iconitaProiect) {
@@ -44,27 +54,33 @@ const ProjectList = () => {
     };
   
     // Handle form submission
-    const handleSubmit = (e) => {
-      e.preventDefault();
-  
-      // Add the new project to the projects array
-      const newProjectObject = {
-        ProiectID: projects.length + 1, // Generate a unique ID for the new project
-        NumeProiect: newProject.projectName,
-        Descriere: newProject.projectDescription,
-        NotaProiect: parseInt(newProject.projectNota, 10),
-        IconitaProiect: 2, // Assuming the default icon for a new project
-      };
-  
-      projects.push(newProjectObject);
-  
-      // Clear the form inputs
-      setNewProject({
-        projectName: '',
-        projectDescription: '',
-        projectNota: '',
-      });
-    };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // Create a new project object
+  const newProjectObject = {
+    NumeProiect: newProject.projectName,
+    Descriere: newProject.projectDescription,
+    NotaProiect: 1,
+  };
+
+  try {
+    // Perform the API call to add the new project
+    await axios.post(`${config.REACT_APP_BACKEND_URL}/students/createProject`, newProjectObject);
+    
+    // Clear the form inputs
+    setNewProject({
+      projectName: '',
+      projectDescription: '',
+    });
+
+    // Refresh the page after the API call completes
+    window.location.reload();
+  } catch (error) {
+    console.error('Error adding project:', error);
+    // Handle any error scenarios or display error messages
+  }
+};
   
     return (
       <div className="page-container">
@@ -78,7 +94,6 @@ const ProjectList = () => {
                     <h3>{project.NumeProiect}</h3>
                   </Link>
                   <p>{project.Descriere}</p>
-                  <p>Nota proiect: {project.NotaProiect}</p>
                 </div>
                 <span className={`project-icon ${project.IconitaProiect === 2 ? 'add' : ''}`}>
                   {getIconEmoji(project.IconitaProiect)}
@@ -105,16 +120,6 @@ const ProjectList = () => {
     id="projectDescription"
     name="projectDescription"
     value={newProject.projectDescription}
-    onChange={handleInputChange}
-    required
-  />
-
-  <label htmlFor="projectNota">Nota:</label>
-  <input
-    type="number"
-    id="projectNota"
-    name="projectNota"
-    value={newProject.projectNota}
     onChange={handleInputChange}
     required
   />
