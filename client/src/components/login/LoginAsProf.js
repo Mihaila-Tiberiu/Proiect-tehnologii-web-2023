@@ -15,6 +15,10 @@ const LoginAsProf = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
+  const handleBack = () => {
+    navigate('/');
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -105,7 +109,9 @@ const LoginAsProf = () => {
         <button type="submit" className="btn btn-primary">
           Login
         </button>
+        <button className="btn btn-secondary" onClick={handleBack}>Back</button>
       </form>
+      
     </div>
   );
 };
