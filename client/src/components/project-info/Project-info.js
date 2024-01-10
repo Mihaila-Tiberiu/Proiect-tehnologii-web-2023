@@ -1,92 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import config from '../../config'
 
 const ProjectDetails = () => {
+
+  function formatDate(dateString) {
+  const [year, month, day] = dateString.split('-').map(Number);
+  const formattedDate = new Date(year, month - 1, day + 1);
+  return formattedDate.toISOString().split('T')[0];
+}
+
+
+  function parseDateString(dateString) {
+    // Split the date string into an array of day, month, and year
+    const [year,month,day] = dateString.split('-').map(Number);
+  
+    // Month in JavaScript Date object is zero-indexed, so subtract 1 from the parsed month
+    const monthIndex = month - 1;
+  
+    // Create a new Date object with the parsed values
+    const parsedDate = new Date(year, monthIndex, day);
+  
+    return parsedDate;
+  }
   // Sample project data (replace with your actual data)
+
+  const [livrabileValue, setLivrabileValue] = useState(null);
+  const [titleValue, setTitleValue] = useState('');
+  const [descriptionValue, setDescriptionValue] = useState('');
+
+  useEffect(() => {
+    // Step 1: Retrieve clickedProjectId from localStorage
+    const clickedProjectId = localStorage.getItem("clickedProjectId");
+
+    // Step 2: Make an API call to fetch all projects
+    fetch(config.REACT_APP_BACKEND_URL+"/professors/getProjects")
+      .then(response => response.json())
+      .then(data => {
+        // Step 3: Identify the project with ProiectID equal to clickedProjectId
+        const projects = data; // Assuming data is an array of projects from the API
+        const selectedProject = projects.find(project => project.ProiectID == clickedProjectId);
+        console.log(selectedProject);
+
+        if (selectedProject) {
+          // Step 4: Extract Livrabile property and save it as a new variable
+          const livrabileValue = selectedProject.Livrabile;
+
+          // Update state with the extracted value
+          setLivrabileValue(livrabileValue);
+
+          const titleValue = selectedProject.NumeProiect;
+          setTitleValue(titleValue);
+
+          const descriptionValue = selectedProject.Descriere;
+          setDescriptionValue(descriptionValue);
+
+          console.log("Livrabile Value:", livrabileValue);
+        } else {
+          console.log("Project not found");
+        }
+      })
+      .catch(error => console.error("Error fetching projects:", error));
+  }, []);
+
   const project = {
-    title: 'Your Project Title',
-    description: 'Description of your project goes here.',
-    deliverables: [
-        {
-            id: 1,
-            name: 'Deliverable 1',
-            description: 'Description of Deliverable 1 goes here.',
-            deadline: new Date('2023-01-15'), // Replace with an actual date
-            videoLink: 'https://example.com/video1',
-            reviews: [
-              { grade: 8, description: 'Good work on this deliverable!' },
-              { grade: 6, description: 'Needs improvement in some areas.' }
-            ]
-          },
-          {
-            id: 2,
-            name: 'Deliverable 2',
-            description: 'Description of Deliverable 2 goes here.',
-            deadline: new Date('2024-02-05'), // Replace with an actual date
-            videoLink: 'https://example.com/video2',
-            reviews: [
-              { grade: 9, description: 'Excellent job on this one!' }
-            ]
-          },
-          {
-            id: 3,
-            name: 'Deliverable 3',
-            description: 'Description of Deliverable 3 goes here.',
-            deadline: new Date('2024-03-10'), // A future deadline
-            videoLink: 'https://example.com/video3',
-            reviews: [
-              { grade: 7, description: 'This deliverable was okay.' }
-            ]
-          },
-          {
-            id: 3,
-            name: 'Deliverable 3',
-            description: 'Description of Deliverable 3 goes here.',
-            deadline: new Date('2024-03-10'), // A future deadline
-            videoLink: 'https://example.com/video3',
-            reviews: [
-              { grade: 7, description: 'This deliverable was okay.' }
-            ]
-          },
-          {
-            id: 3,
-            name: 'Deliverable 3',
-            description: 'Description of Deliverable 3 goes here.',
-            deadline: new Date('2024-03-10'), // A future deadline
-            videoLink: 'https://example.com/video3',
-            reviews: [
-              { grade: 7, description: 'This deliverable was okay.' }
-            ]
-          },
-          {
-            id: 3,
-            name: 'Deliverable 3',
-            description: 'Description of Deliverable 3 goes here.',
-            deadline: new Date('2024-03-10'), // A future deadline
-            videoLink: 'https://example.com/video3',
-            reviews: [
-              { grade: 7, description: 'This deliverable was okay.' }
-            ]
-          },
-          {
-            id: 4,
-            name: 'Deliverable 3',
-            description: 'Description of Deliverable 3 goes here.',
-            deadline: new Date('2024-01-01'), // A future deadline
-            videoLink: 'https://example.com/video3',
-            reviews: [
-              { grade: 7, description: 'This deliverable was okay.' },
-              { grade: 7, description: 'This deliverable was okay.' },
-              { grade: 7, description: 'This deliverable was okay.' },
-              { grade: 7, description: 'This deliverable was okay.' },
-              { grade: 7, description: 'This deliverable was okay.' },
-              { grade: 7, description: 'This deliverable was okay.' },
-              { grade: 7, description: 'This deliverable was okay.' },
-              { grade: 7, description: 'This deliverable was okay.' },
-            ]
-          }
-    ],
+    title: titleValue,
+    description: descriptionValue,
+    deliverables: livrabileValue !== null ? livrabileValue : []
   };
 
   const navigate = useNavigate();
@@ -116,14 +96,14 @@ const ProjectDetails = () => {
 
   const handleDeliverableClick = (deliverable) => {
     const today = new Date();
-    if (deliverable.deadline <= today) {
-      setSelectedDeliverable(deliverable);
-      setSelectedDeliverableId(deliverable.id); // Store the ID of the selected deliverable
-      console.log('Selected Deliverable ID:', deliverable.id);
-    } else {
-      setSelectedDeliverable(null);
-      setSelectedDeliverableId(null); // Reset the selected deliverable ID
-    }
+  if (deliverable && deliverable.Deadline && parseDateString(deliverable.Deadline) <= today) {
+    setSelectedDeliverable(deliverable);
+    setSelectedDeliverableId(deliverable.LivrabilID); // Store the ID of the selected deliverable
+    console.log('Selected Deliverable ID:', deliverable.LivrabilID);
+  } else {
+    setSelectedDeliverable(null);
+    setSelectedDeliverableId(null); // Reset the selected deliverable ID
+  }
   };
 
   const [newDeliverable, setNewDeliverable] = useState({
@@ -145,8 +125,32 @@ const ProjectDetails = () => {
 
   const handleNewDeliverableSubmit = (e) => {
     e.preventDefault();
-    // Logic to add a new deliverable
-    console.log('New deliverable:', newDeliverable);
+
+    // Create a new deliverable object from the form data
+    const newDeliverableData = {
+      ProiectID: localStorage.getItem("clickedProjectId"),
+      NumeLivrabil: newDeliverable.name,
+      VideoDemonstrativ: newDeliverable.videoLink,
+      LinkServer: newDeliverable.description,
+      Deadline: formatDate(newDeliverable.deadline), // Assuming you have a formatDate function
+    };
+
+    // Make a POST request to add the new deliverable
+    fetch(`${config.REACT_APP_BACKEND_URL}/students/addDeliverable/${newDeliverableData.ProiectID}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newDeliverableData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('New deliverable added:', data);
+        // Assuming the API response contains the updated list of deliverables, you can update the state accordingly
+        setLivrabileValue([...livrabileValue, data]);
+      })
+      .catch(error => console.error('Error adding new deliverable:', error));
+
     // Reset the form fields
     setNewDeliverable({
       name: '',
@@ -192,7 +196,7 @@ const ProjectDetails = () => {
             <ul className="list-group">
               {project.deliverables.map((deliverable) => {
                 const today = new Date();
-                const isPastDeadline = deliverable.deadline <= today;
+                const isPastDeadline = deliverable.Deadline <= today;
                 const meanGrade =
                   isPastDeadline && deliverable.reviews.length > 0
                     ? calculateMeanGrade(deliverable.reviews)
@@ -207,23 +211,25 @@ const ProjectDetails = () => {
                     onClick={() => handleDeliverableClick(deliverable)}
                     style={{ cursor: isPastDeadline ? 'pointer' : 'default' }}
                   >
-                    <strong>{deliverable.name}</strong>
+                    <strong>{deliverable.NumeLivrabil}</strong>
                     <br />
-                    Deadline: {deliverable.deadline.toLocaleDateString('en-GB')}
+                    Deadline: {deliverable.Deadline}
                     {isPastDeadline && meanGrade !== null && ( // Display mean grade if conditions are met
                       <span>
                         <br />
                         Mean Grade: {meanGrade}
                       </span>
                     )}
-                    <p>Description: {deliverable.description}</p>
-                    {deliverable.videoLink && (
-                      <p>
+                    <br />
+                    <span>Description: {deliverable.LinkServer}</span>
+                    {deliverable.VideoDemonstrativ && (
+                      <span>
+                        <br />
                         Video Link:{' '}
-                        <a href={deliverable.videoLink} target="_blank" rel="noopener noreferrer">
-                          {deliverable.videoLink}
+                        <a href={deliverable.VideoDemonstrativ} target="_blank" rel="noopener noreferrer">
+                          {deliverable.VideoDemonstrativ}
                         </a>
-                      </p>
+                      </span>
                     )}
                   </li>
                 );
@@ -231,6 +237,7 @@ const ProjectDetails = () => {
             </ul>
             {/* Form to add a new deliverable */}
           <form onSubmit={handleNewDeliverableSubmit}>
+            <br />
             <h4>Add New Deliverable:</h4>
             <div className="mb-3">
               <label htmlFor="newDeliverableName" className="form-label">Name:</label>
@@ -262,7 +269,7 @@ const ProjectDetails = () => {
                 className="form-control"
                 id="newDeliverableDeadline"
                 name="deadline"
-                value={newDeliverable.deadline}
+                value={newDeliverable.Deadline}
                 onChange={handleNewDeliverableChange}
                 required
               />
