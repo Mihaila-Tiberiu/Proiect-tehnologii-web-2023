@@ -17,7 +17,8 @@ const ProjectList = () => {
       case 1:
         return '✅'; // Checkmark emoji for acceptance
       case 2:
-        return '➕'; // Plus emoji for availability
+        // Make the "+" emoji clickable and link to the home page
+        return <Link to="/">➕</Link>;
       default:
         return '';
     }
@@ -28,24 +29,37 @@ const ProjectList = () => {
   };
 
   return (
-    <div className="project-list-container">
-      <h2>Projects:</h2>
-      {projects.map((project) => (
-        <div key={project.ProiectID} className="project-item">
-          
+    <div className="page-container">
+      <div className="project-list-container">
+        <h2>Complete project list:</h2>
+        {projects.map((project) => (
+          <div key={project.ProiectID} className="project-item">
             <div className="project-info">
-            <Link to="/" onClick={() => handleClick(project.ProiectID)}>
-              <h3>
-                {project.NumeProiect}  
-              </h3>
+              <Link to="/" onClick={() => handleClick(project.ProiectID)}>
+                <h3>{project.NumeProiect}</h3>
               </Link>
               <p>{project.Descriere}</p>
-             
               <p>Nota proiect: {project.NotaProiect}</p>
             </div>
-            <span className="project-icon">{getIconEmoji(project.IconitaProiect)}</span>
+            <span className={`project-icon ${project.IconitaProiect === 2 ? 'add' : ''}`}>
+              {getIconEmoji(project.IconitaProiect)}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="part-of-projects-container">
+        <h2>You are part of the following projects:</h2>
+        {/* Render the list of projects the user is part of */}
+        {/* [project 1] [project 1 description] and so on */}
+        {/* You can replace the following placeholder text with your actual data */}
+        <div className="part-of-project-item">
+          [Project 1]
+          <br />
+          [Project 1 description] and so on
         </div>
-      ))}
+        {/* Repeat the above structure for each project the user is part of */}
+      </div>
     </div>
   );
 };
