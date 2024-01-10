@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import UserInfo from './dashboard_components/InfoUser';
 import ProjectList from './dashboard_components/ProjectList';
 
@@ -7,9 +7,7 @@ const StudentDashboard = () => {
   const [hasCookie, setHasCookie] = useState(false);
   const [studentID, setStudentID] = useState(null);
 
-    // Add useNavigate here
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkCookie = () => {
