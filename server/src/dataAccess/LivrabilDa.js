@@ -1,16 +1,41 @@
 import db from "../../database.js";
 import Livrabil from "../entities/Livrabil.js";
+import Proiect from "../entities/Proiect.js";
+import Recenzie from "../entities/Recenzie.js";
+import { AliasRecenzie } from "../entities/databaseConsts.js";
+import { getProiecteById } from "./ProiectDA.js";
 
-async function createLivrabil(livrabil){
+async function createLivrabil(livrabil, id){
+    try{
+        const proiect = await getProiecteById(id);
+
+        if(!proiect){
+            console.log("proiectul nu exista, nu se poate adauga livrabil");
+            
+        }
+        else if(livrabil.ProiectID !== id){
+            console.log("id proiect introdus diferit"); 
+        }
+    }catch(e){
+        throw e;
+    }
     return await Livrabil.create(livrabil);
 }
 
 async function getLivrabile(){
-    return await Livrabil.findAll();
+    return await Livrabil.findAll({
+        include: [
+            {model: Recenzie, as: AliasRecenzie}
+        ]
+    });
 }
 
 async function getLivrabileById(id) {
-    return await Livrabil.findByPk(id);
+    return await Livrabil.findByPk(id, {
+        include: [
+            {model: Recenzie, as: AliasRecenzie}
+        ]
+    });
 }
 
 
@@ -34,9 +59,26 @@ async function updateLivrabil(livrabil, id){
     }
 }
 
+async function associateLivrabil(livrabilId, proiectID){
+    try{
+        const livrabil = await getLivrabileById(livrabilId);
+
+        if(!livrabil){
+            console.log("The deliverable with this id does not exist");
+        }
+
+        livrabil.ProiectID = proiectID;
+        await livrabil.save();
+    }
+    catch(e){
+        throw e;
+    }
+}
+
 export{
     getLivrabile,
     getLivrabileById,
     updateLivrabil,
-    createLivrabil
+    createLivrabil,
+    associateLivrabil
 }

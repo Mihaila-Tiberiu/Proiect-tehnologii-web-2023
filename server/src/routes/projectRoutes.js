@@ -1,6 +1,8 @@
 import express from "express";
 import { createProiect, getProiecte, updateProiect } from "../dataAccess/ProiectDA.js";
-import { updateLivrabil } from "../dataAccess/LivrabilDa.js";
+import { createLivrabil, getLivrabileById, updateLivrabil } from "../dataAccess/LivrabilDa.js";
+import { associateStudent } from "../dataAccess/StudentiDA.js";
+import { createRecenzie } from "../dataAccess/RecenzieDA.js";
 
 const projectRoutes = express.Router();
 
@@ -14,9 +16,9 @@ projectRoutes.route('/allProjects').get(async (req, res) => {
 })
 
 // // Route to join an existing project
-projectRoutes.post('/joinProject', (req, res) => {
+projectRoutes.route('/joinProject').put(async (req, res) => {
   // Logic to join an existing project
-  //primesc in body idstud si idproj
+  return res.json(await associateStudent(req.body.studId, req.body.projId));
 
 });
 
@@ -27,8 +29,10 @@ projectRoutes.route('/editProject/:projectId').put(async (req, res) => {
 });
 
 // Route to add deliverables to a project
-projectRoutes.post('/addDeliverable/:projectId', (req, res) => {
+projectRoutes.route('/addDeliverable/:projectId').post(async (req, res) => {
   // Logic to add deliverables to a project
+  let idProiect = req.params.projectId;
+  return res.json(await createLivrabil(req.body, idProiect));
 });
 
 // Route to edit deliverable details
@@ -37,10 +41,17 @@ projectRoutes.route('/editDeliverable/:deliverableId').put(async (req, res) => {
   return res.json(await updateLivrabil(req.body, id));
 });
 
-// // Route to add personal review
-// router.post('/addOwnReview/:projectId', (req, res) => {
-//   // Logic to add personal review
-      //
-// });
+// Route to add personal review
+projectRoutes.route('/addOwnReview/:deliverableId').post(async (req, res) => {
+  // Logic to add personal review
+  let idlivrabil = req.params.deliverableId;
+  return res.json(await createRecenzie(req.body, idlivrabil));
+});
+
+//route to get reviews for deliverable
+projectRoutes.route('/allReviews/:idDeliverable').get(async (req, res) => {
+      let idliv = req.params.idDeliverable;
+      return res.json(await getLivrabileById(idliv));
+});
 
 export default projectRoutes;
