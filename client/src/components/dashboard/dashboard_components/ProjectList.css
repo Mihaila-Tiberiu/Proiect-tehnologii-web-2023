@@ -1,0 +1,87 @@
+/* ProjectList.css */
+
+.page-container {
+    display: flex;
+    justify-content: space-between; /* Add space between the two divs */
+  }
+  
+  .left-container,
+  .right-container {
+    width: calc(50% - 20px); /* Adjust width as needed, considering margin */
+    margin: 0 20px; /* Add margin to separate the two containers */
+    margin-top:50px;
+  }
+  
+  .project-list-container,
+  .part-of-projects-container,
+  .jury-projects-container,
+  .jury-chief-projects-container {
+    max-width: 600px;
+    margin: 0;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .project-item,
+  .part-of-project-item,
+  .jury-project-item,
+  .jury-chief-project-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .project-item:hover,
+  .part-of-project-item:hover,
+  .jury-project-item:hover,
+  .jury-chief-project-item:hover {
+    transform: scale(1.02);
+  }
+  
+  h2 {
+    font-size: 24px;
+    color: #555;
+  }
+  
+  h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .project-info,
+  .part-of-projects-list,
+  .jury-projects-list,
+  .jury-chief-projects-list {
+    flex: 1;
+  }
+  
+  .project-icon,
+  .jury-icon,
+  .jury-chief-icon {
+    margin-left: 10px;
+    font-size: 24px;
+  }
+  
+  .project-icon.add,
+  .jury-icon.add,
+  .jury-chief-icon.add {
+    font-size: 24px;
+    border-radius: 5px !important;
+    background-color: grey;
+    padding: 5px; /* Add padding for better visibility */
+  }
+  
