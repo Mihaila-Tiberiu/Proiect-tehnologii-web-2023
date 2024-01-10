@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import UserInfo from './dashboard_components/InfoUser';
+import ProjectList from './dashboard_components/ProjectList';
 
 const StudentDashboard = () => {
   const [hasCookie, setHasCookie] = useState(false);
@@ -50,6 +51,9 @@ const StudentDashboard = () => {
         // Content to display if the 'StudentID' cookie is set
         <div>
         <UserInfo username={user.username} id={user.id} onLogout={handleLogout} />
+        <ProjectList />
+
+
         </div>
       ) : (
         // Content to display if the 'StudentID' cookie is not set
