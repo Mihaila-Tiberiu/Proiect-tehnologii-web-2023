@@ -6,8 +6,6 @@ import Profesori from "./Profesori.js";
 import Proiect from "./Proiect.js";
 import Recenzie from "./Recenzie.js";
 import Studenti from "./Studenti.js";
-import StudentiLivrabilJurati from "./StudentiLivrabilJurati.js";
-import StudentiProiectMP from "./StudentiProiectMP.js";
 import { open } from 'sqlite';
 import { AliasLivrabil, AliasProfesori, AliasProiect, 
         AliasRecenzie, AliasStudenti, AliasStudentiLivrabil, 

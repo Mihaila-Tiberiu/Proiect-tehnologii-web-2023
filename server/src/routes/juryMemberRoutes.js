@@ -1,18 +1,19 @@
 import express from "express";
+import db from "../../database.js";
+import { chooseJury } from "../dataAccess/StudentiDA.js";
 
 const juryMemberRoutes = express.Router();
 
-// const db = require('../../database');
+// Route to choose chief member of jury
+juryMemberRoutes.route('/chooseChiefMemberOfJury/:projectId').put(async (req, res) => {
+  // Logic to choose chief member of jury
+});
 
-// // Route to choose chief member of jury
-// router.put('/chooseChiefMemberOfJury/:projectId', (req, res) => {
-//   // Logic to choose chief member of jury
-// });
-
-// // Route to choose jurors for a project
-// router.put('/chooseJurors/:projectId', (req, res) => {
-//   // Logic to choose jurors for a project
-// });
+// Route to choose jurors for a project
+juryMemberRoutes.route('/chooseJurors/:projectId').put(async (req, res) => {
+  // Logic to choose jurors for a project
+  return res.json(await chooseJury(req.params.projectId));
+});
 
 // // Special functionalities for the chief member of jury
 // router.post('/addOthersReview/:projectId', (req, res) => {

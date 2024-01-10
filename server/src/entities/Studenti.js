@@ -28,6 +28,14 @@ const Studenti = db.define("Studenti", {
     {
         type: Sequelize.INTEGER,
         allowNull: true
+    },
+    esteJurat:{
+        type: Sequelize.INTEGER, //1 - este jurat 0 - nu este
+        defaultValue: 0
+    },
+    esteSef:{
+        type:Sequelize.INTEGER, //1 - este jurat 0 - nu este
+        defaultValue: 0
     }
 }, {tableName: "Studenti"});
 
