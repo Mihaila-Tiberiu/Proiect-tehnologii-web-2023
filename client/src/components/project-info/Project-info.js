@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const ProjectDetails = () => {
   // Sample project data (replace with your actual data)
@@ -10,7 +12,7 @@ const ProjectDetails = () => {
             id: 1,
             name: 'Deliverable 1',
             description: 'Description of Deliverable 1 goes here.',
-            deadline: new Date('2024-01-15'), // Replace with an actual date
+            deadline: new Date('2023-01-15'), // Replace with an actual date
             videoLink: 'https://example.com/video1',
             reviews: [
               { grade: 8, description: 'Good work on this deliverable!' },
@@ -87,14 +89,40 @@ const ProjectDetails = () => {
     ],
   };
 
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    const studentIDCookie = document.cookie.includes('StudentID=');
+    const professorIDCookie = document.cookie.includes('ProfesorID=');
+
+    if (studentIDCookie) {
+      navigate('/student-dashboard');
+    } else if (professorIDCookie) {
+      navigate('/prof-dashboard');
+    } else {
+      navigate('/');
+    }
+  };
+
+  const calculateMeanGrade = (reviews) => {
+    const gradesSum = reviews.reduce((total, review) => total + review.grade, 0);
+    const meanGrade = gradesSum / reviews.length;
+    return meanGrade.toFixed(2); // Round the mean grade to two decimal places
+  };
+
   const [selectedDeliverable, setSelectedDeliverable] = useState(null);
+
+  const [selectedDeliverableId, setSelectedDeliverableId] = useState(null);
 
   const handleDeliverableClick = (deliverable) => {
     const today = new Date();
     if (deliverable.deadline <= today) {
-      setSelectedDeliverable(deliverable); // Update here to assign the entire deliverable object
+      setSelectedDeliverable(deliverable);
+      setSelectedDeliverableId(deliverable.id); // Store the ID of the selected deliverable
+      console.log('Selected Deliverable ID:', deliverable.id);
     } else {
       setSelectedDeliverable(null);
+      setSelectedDeliverableId(null); // Reset the selected deliverable ID
     }
   };
 
@@ -150,24 +178,108 @@ const ProjectDetails = () => {
         {/* Left side */}
         <div className="col-md-6 bg-light">
           <div className="p-4">
+          <button
+            onClick={handleGoBack}
+            className="btn btn-secondary mb-2"
+            style={{ marginRight: '10px' }}
+          >
+            Back to Dashboard
+          </button>
             <h2>{project.title}</h2>
             <p>{project.description}</p>
 
             <h4>Deliverables:</h4>
             <ul className="list-group">
-              {project.deliverables.map((deliverable) => (
-                <li
-                  key={deliverable.id}
-                  className="list-group-item"
-                  onClick={() => handleDeliverableClick(deliverable)}
-                  style={{ cursor: deliverable.deadline <= new Date() ? 'pointer' : 'default' }}
-                >
-                  <strong>{deliverable.name}</strong>
-                  <br />
-                  Deadline: {deliverable.deadline.toLocaleDateString('en-GB')}
-                </li>
-              ))}
+              {project.deliverables.map((deliverable) => {
+                const today = new Date();
+                const isPastDeadline = deliverable.deadline <= today;
+                const meanGrade =
+                  isPastDeadline && deliverable.reviews.length > 0
+                    ? calculateMeanGrade(deliverable.reviews)
+                    : null;
+
+                return (
+                  <li
+                    key={deliverable.id}
+                    className={`list-group-item ${
+                      selectedDeliverableId === deliverable.id ? 'active' : ''
+                    }`}
+                    onClick={() => handleDeliverableClick(deliverable)}
+                    style={{ cursor: isPastDeadline ? 'pointer' : 'default' }}
+                  >
+                    <strong>{deliverable.name}</strong>
+                    <br />
+                    Deadline: {deliverable.deadline.toLocaleDateString('en-GB')}
+                    {isPastDeadline && meanGrade !== null && ( // Display mean grade if conditions are met
+                      <span>
+                        <br />
+                        Mean Grade: {meanGrade}
+                      </span>
+                    )}
+                    <p>Description: {deliverable.description}</p>
+                    {deliverable.videoLink && (
+                      <p>
+                        Video Link:{' '}
+                        <a href={deliverable.videoLink} target="_blank" rel="noopener noreferrer">
+                          {deliverable.videoLink}
+                        </a>
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
+            {/* Form to add a new deliverable */}
+          <form onSubmit={handleNewDeliverableSubmit}>
+            <h4>Add New Deliverable:</h4>
+            <div className="mb-3">
+              <label htmlFor="newDeliverableName" className="form-label">Name:</label>
+              <input
+                type="text"
+                className="form-control"
+                id="newDeliverableName"
+                name="name"
+                value={newDeliverable.name}
+                onChange={handleNewDeliverableChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="newDeliverableDescription" className="form-label">Description:</label>
+              <textarea
+                className="form-control"
+                id="newDeliverableDescription"
+                name="description"
+                value={newDeliverable.description}
+                onChange={handleNewDeliverableChange}
+                required
+              ></textarea>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="newDeliverableDeadline" className="form-label">Deadline:</label>
+              <input
+                type="date"
+                className="form-control"
+                id="newDeliverableDeadline"
+                name="deadline"
+                value={newDeliverable.deadline}
+                onChange={handleNewDeliverableChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="newDeliverableVideoLink" className="form-label">Video Link:</label>
+              <input
+                type="url"
+                className="form-control"
+                id="newDeliverableVideoLink"
+                name="videoLink"
+                value={newDeliverable.videoLink}
+                onChange={handleNewDeliverableChange}
+              />
+            </div>
+            <button type="submit" className="btn btn-primary">Add Deliverable</button>
+          </form>
           </div>
         </div>
 
@@ -190,6 +302,7 @@ const ProjectDetails = () => {
                 </ul>
                 <form onSubmit={handleNewReviewSubmit}>
                   <div className="mb-3">
+                  <h4>Add New Review:</h4>
                     <label htmlFor="newReviewGrade" className="form-label">Grade:</label>
                     <input
                       type="number"
