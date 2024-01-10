@@ -33,11 +33,6 @@ const Livrabil = db.define("Livrabil",{
     {
         type: Sequelize.STRING,
         allowNull: true
-    }, 
-    RecenzieID:
-    {
-        type: Sequelize.INTEGER,
-        allowNull: true
     }
 }, {tableName:"Livrabil"});
 

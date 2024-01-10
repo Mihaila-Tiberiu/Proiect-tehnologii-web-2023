@@ -5,6 +5,7 @@ import db_init from "./src/entities/databaseInit.js";
 import projectRoutes from "./src/routes/projectRoutes.js";
 import authRouter from "./src/routes/authRoutes.js";
 import profRouter from "./src/routes/professorRoutes.js";
+import juryMemberRoutes from "./src/routes/juryMemberRoutes.js";
 
 const app = express();
 
@@ -24,8 +25,7 @@ db_init();
 
 // // Use the route files
 app.use('/auth', authRouter);
-// app.use('/students', studentRoutes);
-// app.use('/jury', juryMemberRoutes);
+app.use('/jury', juryMemberRoutes);
 app.use('/professors', profRouter);
 app.use('/api', masterRoute);
 app.use('/students', projectRoutes);

@@ -30,10 +30,10 @@ async function createDatabase(){
 
 function fk_Config(){
       Proiect.hasMany(Livrabil, {as: AliasLivrabil, foreignKey: "ProiectID"}); //un proiect are mai multe livrabile
-      Livrabil.hasOne(Recenzie, {as: AliasRecenzie, foreignKey: "LivrabilID"}); //o recenzie are un livrabil
-      Studenti.hasOne(Recenzie, {as: AliasRecenzie, foreignKey:"StudentID"});  //o recenzie are un student
       Proiect.hasMany(Studenti, {as: AliasStudenti, foreignKey: "ProiectID"});
-
+      Studenti.belongsTo(Proiect, {as: AliasProiect, foreignKey: "ProiectID"});
+      Recenzie.belongsTo(Studenti, { as: AliasRecenzie, foreignKey: "StudentID" })  //o recenzie are un student
+      Livrabil.hasMany(Recenzie, {as: AliasRecenzie, foreignKey: "LivrabilID"});
 }
 
 async function db_init() {

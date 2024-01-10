@@ -1,6 +1,21 @@
 import Recenzie from "../entities/Recenzie.js";
+import Livrabil from "../entities/Livrabil.js";
+import { getLivrabileById } from "./LivrabilDa.js";
 
-async function createRecenzie(recenzie){
+async function createRecenzie(recenzie, livrabilId){
+    try{
+        const liv = await getLivrabileById(livrabilId);
+
+        if(!liv){
+            console.log("livrabilul nu exista");
+        }
+        else if(recenzie.LivrabilID !== livrabilId){
+            console.log("id livrabil diferit")
+        }
+    }
+    catch(e){
+        throw e;
+    }
     return await Recenzie.create(recenzie);
 }
 

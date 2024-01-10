@@ -16,7 +16,7 @@ const Recenzie = db.define("Recenzie",{
     StudentID:
     {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     Nota:
     {

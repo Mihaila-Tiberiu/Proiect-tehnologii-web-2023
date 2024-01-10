@@ -5,11 +5,7 @@ import db from "../../database.js";
 import Livrabil from "../entities/Livrabil.js";
 
 async function createProiect(proiect){
-    return await Proiect.create(proiect, {include: [
-        {model: Studenti, as: AliasStudenti},
-        {model: Livrabil, as: AliasLivrabil}
-    ]});
-    
+     return await Proiect.create(proiect);
 }
 
 async function getProiecte() {
@@ -84,7 +80,6 @@ async function updateProiect(proiect, id){
         await t.rollback();
         throw e;
     }
-
 }
 
 export {
@@ -92,5 +87,5 @@ export {
     getProiecte,
     getProiecteById,
     deleteProiect,
-    updateProiect
+    updateProiect,
 }

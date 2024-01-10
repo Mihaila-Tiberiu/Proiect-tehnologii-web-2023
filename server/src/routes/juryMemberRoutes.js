@@ -1,5 +1,6 @@
-// const express = require('express');
-// const router = express.Router();
+import express from "express";
+
+const juryMemberRoutes = express.Router();
 
 // const db = require('../../database');
 
@@ -22,4 +23,4 @@
 //   // Logic to edit reviews for other jury members
 // });
 
-// module.exports = router;
+export default juryMemberRoutes;
