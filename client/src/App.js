@@ -11,6 +11,7 @@ import Login from './components/login/Login';
 import LoginAsProf from './components/login/LoginAsProf';
 import LoginAsStudent from './components/login/LoginAsStudent';
 
+import ProjectInfo from './components/project-info/Project-info';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/register/student" element={<RegisterAsStudent/>} />
         <Route path="/prof-dashboard" element={<ProfDashboard/>} />
         <Route path="/student-dashboard" element={<StudentDashboard/>} />
+        <Route path="/project-info" element={<ProjectInfo/>} />
         </Routes>
     </Router>
   );
