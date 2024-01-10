@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import UserInfo from './dashboard_components/InfoUser';
 
 const StudentDashboard = () => {
   const [hasCookie, setHasCookie] = useState(false);
   const [studentID, setStudentID] = useState(null);
+
+    // Add useNavigate here
+    const navigate = useNavigate();
+
 
   useEffect(() => {
     const checkCookie = () => {
@@ -22,13 +28,28 @@ const StudentDashboard = () => {
     checkCookie();
   }, []);
 
+    // Assuming you have a state for user information
+    const user = {
+      username: 'JohnDoe',
+      id: '123',
+    };
+  
+    const handleLogout = () => {
+      // Delete the 'StudentID' cookie by setting its expiration to a date in the past
+      document.cookie = 'StudentID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  
+      // Redirect to the main root of the site
+      navigate('/');
+    };
+  
+  
+
   return (
     <div>
       {hasCookie ? (
         // Content to display if the 'StudentID' cookie is set
         <div>
-          <h1>Welcome to the Student Dashboard</h1>
-          <p>Your Student ID: {studentID}</p>
+        <UserInfo username={user.username} id={user.id} onLogout={handleLogout} />
         </div>
       ) : (
         // Content to display if the 'StudentID' cookie is not set
