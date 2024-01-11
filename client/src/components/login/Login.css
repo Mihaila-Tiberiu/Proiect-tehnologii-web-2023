@@ -1,0 +1,32 @@
+.titlu {
+    margin-top: 50px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 2%;
+
+  }
+  
+.about {
+    text-align: center;
+    font-size: 25px; 
+    color: black; 
+    margin: 20px; 
+    margin-bottom: 6%;
+  }
+  
+.info {
+    text-align: right;
+    font-size: 25px; 
+    color: black; 
+    margin: 20px; 
+    margin-top: 10%;
+  }
+
+.info2 {
+    text-align: right;
+    font-size: 22px; 
+    color: black; 
+    margin: 20px; 
+  }

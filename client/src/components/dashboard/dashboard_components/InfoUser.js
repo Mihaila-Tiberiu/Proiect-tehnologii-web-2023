@@ -23,16 +23,20 @@ const UserInfo = ({ username, id, onLogout }) => {
   const logoutButtonStyle = {
     cursor: 'pointer',
     border: 'none',
-    background: 'none',
-    color: 'blue',
-    textDecoration: 'underline',
+    borderRadius: '5px', 
+    background: 'blue',
+    color: 'white',
+    padding: '8px 15px',
+    textDecoration: 'none',
+    fontSize: '14px',
   };
+
 
   return (
     <div style={userInfoStyle}>
-      <p style={userInfoTextStyle}>Logged in as: {username} ----- ID: {id}</p>
+      <p style={userInfoTextStyle}>Sunteți autentificat ca: {username}  {'-->'} ID: {id}</p>
       <button style={logoutButtonStyle} onClick={onLogout}>
-        Logout
+        Deconectare
       </button>
     </div>
   );

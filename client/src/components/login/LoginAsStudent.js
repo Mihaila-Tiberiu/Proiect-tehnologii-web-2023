@@ -45,7 +45,7 @@ const LoginAsStudent = () => {
 
   return (
     <div className="container mt-5">
-      <h2>Student Login</h2>
+      <h2 style={{ marginBottom: '20px' }}>Autentificare ca student:</h2>
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
         {/* Input fields for login */}
@@ -105,10 +105,8 @@ const LoginAsStudent = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">
-          Login
-        </button>
-        <button className="btn btn-secondary" onClick={handleBack}>Back</button>
+        <button type="submit" className="btn btn-primary" style={{ marginRight: '10px' }}> Autentificare </button>
+        <button className="btn btn-secondary" onClick={handleBack}>Înapoi</button>
       </form>
       
     </div>

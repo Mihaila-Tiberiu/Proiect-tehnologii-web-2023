@@ -86,7 +86,7 @@ const ProjectList = () => {
       <div className="page-container">
         <div className="left-container">
           <div className="project-list-container">
-            <h2>Complete project list:</h2>
+            <h2>Lista completă a proiectelor:</h2>
             {projects.map((project) => (
               <div key={project.ProiectID} className="project-item">
                 <div className="project-info">
@@ -102,10 +102,10 @@ const ProjectList = () => {
             ))}
           </div>
   
-        {/* Form to add a new project */}
+        {/* Formular pentru adaugarea unui nou proiect */}
 <form className="new-project-form" onSubmit={handleSubmit}>
-  <h2>Add a new project:</h2>
-  <label htmlFor="projectName">Project Name:</label>
+  <h2>Adaugă un proiect nou:</h2>
+  <label htmlFor="projectName">Nume proiect:</label>
   <input
     type="text"
     id="projectName"
@@ -115,7 +115,7 @@ const ProjectList = () => {
     required
   />
 
-  <label htmlFor="projectDescription">Project Description:</label>
+  <label htmlFor="projectDescription">Descrierea proiectului:</label>
   <textarea
     id="projectDescription"
     name="projectDescription"
@@ -124,48 +124,48 @@ const ProjectList = () => {
     required
   />
 
-  <button type="submit">Add Project</button>
+  <button type="submit">Adaugă proiect</button>
 </form>
 
         </div>
 
       <div className="right-container">
       <div className="part-of-projects-container">
-          <h2>You are part of the following projects:</h2>
+          <h2>Faceți parte din următoarele proiecte:</h2>
           {/* Render the list of projects the user is part of */}
           {/* [project 1] [project 1 description] and so on */}
-          {/* You can replace the following placeholder text with your actual data */}
+
           <div className="part-of-project-item">
             [Project 1]
             <br />
-            [Project 1 description] and so on
+            [Project 1 description]
           </div>
-          {/* Repeat the above structure for each project the user is part of */}
+
         </div>
         <div className="jury-projects-container">
-          <h2>You have been selected jury for the following projects:</h2>
+          <h2>Ați fost selectat drept jurat pentru următoarele proiecte:</h2>
           {/* Render the list of projects the user is selected as a jury for */}
           {/* [Proiect 3] [Descriere proiect 3] and so on */}
-          {/* You can replace the following placeholder text with your actual data */}
+      
           <div className="jury-project-item">
             [Proiect 3]
             <br />
-            [Descriere proiect 3] and so on
+            [Descriere proiect 3]
           </div>
           {/* Repeat the above structure for each project the user is selected as a jury for */}
         </div>
 
         <div className="jury-chief-projects-container">
-          <h2>You are chief juror for the following projects:</h2>
+          <h2>Sunteți jurat șef pentru următoarele proiecte:</h2>
           {/* Render the list of projects the user is chief juror for */}
           {/* [Proiect 4] [Descriere proiect 4] and so on */}
-          {/* You can replace the following placeholder text with your actual data */}
+  
           <div className="jury-chief-project-item">
             [Proiect 4]
             <br />
-            [Descriere proiect 4] and so on
+            [Descriere proiect 4] 
           </div>
-          {/* Repeat the above structure for each project the user is chief juror for */}
+
         </div>
       </div>
     </div>

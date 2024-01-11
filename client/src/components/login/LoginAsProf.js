@@ -46,10 +46,10 @@ const LoginAsProf = () => {
 
   return (
     <div className="container mt-5">
-      <h2>Professor Login</h2>
+    <h2 style={{ marginBottom: '20px' }}>Autentificare ca profesor:</h2>
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
-        {/* Input fields for login */}
+
         <div className="mb-3">
           <label htmlFor="Prenume" className="form-label">
             Prenume (First Name)
@@ -94,7 +94,7 @@ const LoginAsProf = () => {
         </div>
         <div className="mb-3">
           <label htmlFor="ProfesorID" className="form-label">
-            Professor ID
+            ID Profesor
           </label>
           <input
             type="text"
@@ -106,10 +106,12 @@ const LoginAsProf = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">
-          Login
-        </button>
-        <button className="btn btn-secondary" onClick={handleBack}>Back</button>
+
+        <div style={{ marginBottom: '20px' }}>
+         <button type="submit" className="btn btn-primary" style={{ marginRight: '10px' }}> Autentificare </button>
+         <button className="btn btn-secondary" onClick={handleBack}>Înapoi</button>
+        </div>
+
       </form>
       
     </div>

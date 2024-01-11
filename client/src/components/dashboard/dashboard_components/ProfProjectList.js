@@ -79,7 +79,7 @@ const ProjectList = () => {
       <div className="page-container">
         <div className="left-container">
           <div className="project-list-container">
-            <h2>Complete project list:</h2>
+          <h2>Lista completă a proiectelor:</h2>
             {projects.map((project) => (
               <div key={project.ProiectID} className="project-item">
                 <div className="project-info">
@@ -99,7 +99,7 @@ const ProjectList = () => {
 
         <div className="right-container">
         <div className="jury-chief-projects-container">
-          <h2>Pentru a vizualiza nota proiectului, intrati pe pagina acestuia!</h2>
+          <h2>Pentru a vizualiza nota proiectului, intrați pe pagina acestuia!</h2>
         </div>
       </div>
     </div>

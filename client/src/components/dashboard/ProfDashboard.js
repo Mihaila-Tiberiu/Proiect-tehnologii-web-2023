@@ -27,7 +27,6 @@ const ProfessorDashboard = () => {
     checkCookie();
   }, []);
 
-  // Assuming you have a state for user information
   const user = {
     username: 'JohnDoe',
     id: '123',
@@ -35,7 +34,8 @@ const ProfessorDashboard = () => {
 
   const handleLogout = () => {
     // Delete the 'StudentID' cookie by setting its expiration to a date in the past
-    document.cookie = 'StudentID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    // Pentru delogare -> vom sterge cookie-ul 
+    document.cookie = 'ProfesorID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 
     // Redirect to the main root of the site
     navigate('/');
@@ -44,14 +44,14 @@ const ProfessorDashboard = () => {
   return (
     <div>
       {hasCookie ? (
-        // Content to display if the 'ProfessorID' cookie is set
+        // Daca exista cookie-ul 'ProfessorID' -> afisam dashboard-ul
         <div>
           <UserInfo username={user.username} id={user.id} onLogout={handleLogout} />
           <ProfProjectList />
         </div>
       ) : (
-        // Content to display if the 'ProfessorID' cookie is not set
-        <h1>Error: Professor ID not found. Please log in first.</h1>
+         // Daca nu exista cookie-ul 'ProfessorID' -> afisam mesajul de eroare
+        <h1>Eroare: ID-ul profesorului nu a fost găsit. Vă rugăm să vă conectați mai întâi.</h1>
       )}
     </div>
   );
