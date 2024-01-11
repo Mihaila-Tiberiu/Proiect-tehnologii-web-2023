@@ -3,7 +3,7 @@ import Livrabil from "../entities/Livrabil.js";
 import Proiect from "../entities/Proiect.js";
 import Recenzie from "../entities/Recenzie.js";
 import Studenti from "../entities/Studenti.js";
-import { AliasRecenzie, AliasStudentiJur } from "../entities/databaseConsts.js";
+import { AliasRecenzie, AliasStudenti, AliasStudentiJur } from "../entities/databaseConsts.js";
 import { getProiecteById } from "./ProiectDA.js";
 
 async function createLivrabil(livrabil, id){
@@ -14,7 +14,7 @@ async function createLivrabil(livrabil, id){
             console.log("proiectul nu exista, nu se poate adauga livrabil");
             
         }
-        else if(livrabil.ProiectID !== id){
+        else if(livrabil.ProiectID.toString() !== id.toString()){
             console.log("id proiect introdus diferit"); 
         }
     }catch(e){
@@ -26,7 +26,7 @@ async function createLivrabil(livrabil, id){
 async function getLivrabile(){
     return await Livrabil.findAll({
         include: [
-            {model: Studenti, as: AliasStudentiJur},
+            {model: Studenti, as: AliasStudenti},
             {model: Recenzie, as: AliasRecenzie}
         ]
     });

@@ -5,7 +5,7 @@ const AliasRecenzie = "Review";
 const AliasStudenti = "Student";
 const AliasStudentiLivrabil = "StudLivr";
 const AliasStudentiProiect = "StudProj";
-const AliasStudentiJur = "Jurati";
+const AliasStudentiJur = "Student";
 
 export {
     AliasLivrabil, 

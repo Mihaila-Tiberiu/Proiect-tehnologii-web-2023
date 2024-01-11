@@ -8,7 +8,7 @@ import Recenzie from "./Recenzie.js";
 import Studenti from "./Studenti.js";
 import { open } from 'sqlite';
 import { AliasLivrabil, AliasProfesori, AliasProiect, 
-        AliasRecenzie, AliasStudenti, AliasStudentiLivrabil, 
+        AliasRecenzie, AliasStudenti, AliasStudentiJur, AliasStudentiLivrabil, 
         AliasStudentiProiect } from "./databaseConsts.js";
 import db from "../../database.js";
 

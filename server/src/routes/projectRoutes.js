@@ -41,12 +41,6 @@ projectRoutes.route('/editDeliverable/:deliverableId').put(async (req, res) => {
   return res.json(await updateLivrabil(req.body, id));
 });
 
-// Route to add personal review
-projectRoutes.route('/addOwnReview/:deliverableId').post(async (req, res) => {
-  // Logic to add personal review
-  let idlivrabil = req.params.deliverableId;
-  return res.json(await createRecenzie(req.body, idlivrabil));
-});
 
 //route to get reviews for deliverable
 projectRoutes.route('/allReviews/:idDeliverable').get(async (req, res) => {
