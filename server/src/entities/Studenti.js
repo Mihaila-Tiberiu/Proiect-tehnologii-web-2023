@@ -36,6 +36,11 @@ const Studenti = db.define("Studenti", {
     esteSef:{
         type:Sequelize.INTEGER, //1 - este jurat 0 - nu este
         defaultValue: 0
+    },
+    LivrabilID:
+    {
+        type: Sequelize.INTEGER, //livrabilul la care este jurat, nu membru
+        allowNull: true
     }
 }, {tableName: "Studenti"});
 

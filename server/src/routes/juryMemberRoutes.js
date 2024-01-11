@@ -9,8 +9,8 @@ juryMemberRoutes.route('/chooseChiefMemberOfJury/:projectId').put(async (req, re
 });
 
 // Route to choose jurors for a project
-juryMemberRoutes.route('/chooseJurors/:projectId').put(async (req, res) => {
-  return res.json(await chooseJury(req.params.projectId));
+juryMemberRoutes.route('/chooseJurors/:livrabilID').put(async (req, res) => {
+  //return res.json(await chooseJury(req.params.livrabilID));
 });
 
 // // Special functionalities for the chief member of jury

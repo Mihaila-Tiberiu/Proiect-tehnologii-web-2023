@@ -6,6 +6,8 @@ import projectRoutes from "./src/routes/projectRoutes.js";
 import authRouter from "./src/routes/authRoutes.js";
 import profRouter from "./src/routes/professorRoutes.js";
 import juryMemberRoutes from "./src/routes/juryMemberRoutes.js";
+import dailyDatabaseCheck from "./src/dataAccess/dailyCheck.js";
+import cron from "node-cron";
 
 const app = express();
 
@@ -22,6 +24,7 @@ app.use(cors());
 // const { default: router } = require('./src/routes/masterRoute.js');
 
 db_init();
+dailyDatabaseCheck();
 
 // // Use the route files
 app.use('/auth', authRouter);
@@ -35,3 +38,11 @@ const PORT = process.env.PORT || 8080; // port
 app.listen(PORT, () => {
   console.log(`Serverul functioneaza pe port-ul ${PORT}.`);
 });
+
+//ruleaza functia la o anumita ora din zi
+//minut/ ora / zi / * * *
+cron.schedule('42 4 * * *', async () => {
+    await dailyDatabaseCheck();
+  });
+  
+console.log('Scheduler started.');
