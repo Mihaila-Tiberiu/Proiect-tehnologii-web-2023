@@ -10,6 +10,15 @@ const ProjectDetails = () => {
   return formattedDate.toISOString().split('T')[0];
 }
 
+const calculateMeanGradeForDeliverable = (deliverable) => {
+  if (deliverable.Review.length === 0) {
+    return null; // Return null if there are no reviews
+  }
+
+  const gradesSum = deliverable.Review.reduce((total, review) => total + review.Nota, 0);
+  const meanGrade = gradesSum / deliverable.Review.length;
+  return meanGrade.toFixed(2); // Round the mean grade to two decimal places
+};
 
   function parseDateString(dateString) {
     // Split the date string into an array of day, month, and year
@@ -85,7 +94,7 @@ const ProjectDetails = () => {
   };
 
   const calculateMeanGrade = (reviews) => {
-    const gradesSum = reviews.reduce((total, review) => total + review.grade, 0);
+    const gradesSum = reviews.reduce((total, review) => total + review.Nota, 0);
     const meanGrade = gradesSum / reviews.length;
     return meanGrade.toFixed(2); // Round the mean grade to two decimal places
   };
@@ -96,14 +105,20 @@ const ProjectDetails = () => {
 
   const handleDeliverableClick = (deliverable) => {
     const today = new Date();
-  if (deliverable && deliverable.Deadline && parseDateString(deliverable.Deadline) <= today) {
-    setSelectedDeliverable(deliverable);
-    setSelectedDeliverableId(deliverable.LivrabilID); // Store the ID of the selected deliverable
-    console.log('Selected Deliverable ID:', deliverable.LivrabilID);
-  } else {
-    setSelectedDeliverable(null);
-    setSelectedDeliverableId(null); // Reset the selected deliverable ID
-  }
+    if (deliverable && deliverable.Deadline && parseDateString(deliverable.Deadline) <= today) {
+      // Make an API call to fetch the detailed information of the selected deliverable
+      fetch(`${config.REACT_APP_BACKEND_URL}/students/allReviews/${deliverable.LivrabilID}`)
+        .then(response => response.json())
+        .then(data => {
+          setSelectedDeliverable(data); // Update the state with the detailed deliverable information
+          setSelectedDeliverableId(deliverable.LivrabilID);
+          console.log('Selected Deliverable ID:', deliverable.LivrabilID);
+        })
+        .catch(error => console.error('Error fetching deliverable details:', error));
+    } else {
+      setSelectedDeliverable(null);
+      setSelectedDeliverableId(null);
+    }
   };
 
   const [newDeliverable, setNewDeliverable] = useState({
@@ -167,13 +182,57 @@ const ProjectDetails = () => {
 
   const handleNewReviewSubmit = (e) => {
     e.preventDefault();
-    // Logic to add a new review
-    console.log('New review:', newReview);
+
+    // Utility function to get the value of a cookie by name
+    const getCookieValue = (name) => {
+    const cookies = document.cookie.split('; ');
+    for (const cookie of cookies) {
+      const [cookieName, cookieValue] = cookie.split('=');
+      if (cookieName === name) {
+        return cookieValue;
+      }
+    }
+    return null;
+  };
+
+  // Get the StudentID from the cookie
+  const studentIDFromCookie = getCookieValue('StudentID');
+  
+    // Create a new review object from the form data
+    const newReviewData = {
+      LivrabilID: selectedDeliverableId,
+      StudentID: studentIDFromCookie, // Assuming you store StudentID in localStorage
+      Nota: newReview.grade,
+      ReviewText: newReview.description,
+    };
+  
+    // Make a POST request to add the new review
+    fetch(`${config.REACT_APP_BACKEND_URL}/jury/addOwnReview/${selectedDeliverableId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newReviewData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('New review added:', data);
+        // Assuming the API response contains the updated list of reviews, you can update the state accordingly
+        setSelectedDeliverable(prevDeliverable => ({
+          ...prevDeliverable,
+          Review: [...prevDeliverable.Review, data],
+        }));
+      })
+      .catch(error => console.error('Error adding new review:', error));
+  
     // Reset the form fields
     setNewReview({
       grade: '',
       description: '',
     });
+
+    //window.location.reload();
+
   };
 
   return (
@@ -187,26 +246,26 @@ const ProjectDetails = () => {
             className="btn btn-secondary mb-2"
             style={{ marginRight: '10px' }}
           >
-            Înapoi la Dashboard
+            Back to Dashboard
           </button>
             <h2>{project.title}</h2>
             <p>{project.description}</p>
 
-            <h4>Livrabile:</h4>
+            <h4>Deliverables:</h4>
             <ul className="list-group">
               {project.deliverables.map((deliverable) => {
                 const today = new Date();
                 const isPastDeadline = deliverable.Deadline <= today;
                 const meanGrade =
-                  isPastDeadline && deliverable.reviews.length > 0
-                    ? calculateMeanGrade(deliverable.reviews)
+                  isPastDeadline && deliverable.review.length > 0
+                    ? calculateMeanGrade(deliverable.review)
                     : null;
 
                 return (
                   <li
                     key={deliverable.id}
                     className={`list-group-item ${
-                      selectedDeliverableId === deliverable.id ? 'active' : ''
+                      selectedDeliverableId === deliverable.LivrabilID ? 'active' : ''
                     }`}
                     onClick={() => handleDeliverableClick(deliverable)}
                     style={{ cursor: isPastDeadline ? 'pointer' : 'default' }}
@@ -217,15 +276,15 @@ const ProjectDetails = () => {
                     {isPastDeadline && meanGrade !== null && ( // Display mean grade if conditions are met
                       <span>
                         <br />
-                        Nota medie: {meanGrade}
+                        Mean Grade: {meanGrade}
                       </span>
                     )}
                     <br />
-                    <span>Descriere: {deliverable.LinkServer}</span>
+                    <span>Description: {deliverable.LinkServer}</span>
                     {deliverable.VideoDemonstrativ && (
                       <span>
                         <br />
-                        Link video prezentare:{' '}
+                        Video Link:{' '}
                         <a href={deliverable.VideoDemonstrativ} target="_blank" rel="noopener noreferrer">
                           {deliverable.VideoDemonstrativ}
                         </a>
@@ -238,9 +297,9 @@ const ProjectDetails = () => {
             {/* Form to add a new deliverable */}
           <form onSubmit={handleNewDeliverableSubmit}>
             <br />
-            <h4>Adaugă livrabil nou:</h4>
+            <h4>Add New Deliverable:</h4>
             <div className="mb-3">
-              <label htmlFor="newDeliverableName" className="form-label">Nume:</label>
+              <label htmlFor="newDeliverableName" className="form-label">Name:</label>
               <input
                 type="text"
                 className="form-control"
@@ -252,7 +311,7 @@ const ProjectDetails = () => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="newDeliverableDescription" className="form-label">Descriere:</label>
+              <label htmlFor="newDeliverableDescription" className="form-label">Description:</label>
               <textarea
                 className="form-control"
                 id="newDeliverableDescription"
@@ -275,7 +334,7 @@ const ProjectDetails = () => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="newDeliverableVideoLink" className="form-label">Link video prezentare:</label>
+              <label htmlFor="newDeliverableVideoLink" className="form-label">Video Link:</label>
               <input
                 type="url"
                 className="form-control"
@@ -285,7 +344,7 @@ const ProjectDetails = () => {
                 onChange={handleNewDeliverableChange}
               />
             </div>
-            <button type="submit" className="btn btn-primary">Adaugă livrabil</button>
+            <button type="submit" className="btn btn-primary">Add Deliverable</button>
           </form>
           </div>
         </div>
@@ -293,15 +352,18 @@ const ProjectDetails = () => {
         {/* Right side */}
         <div className="col-md-6">
           <div className="p-4">
-            <h2>Evaluări:</h2>
+            <h2>Reviews:</h2>
             {selectedDeliverable ? (
               <React.Fragment>
+                <p>
+                <strong>Mean Grade:</strong> {calculateMeanGradeForDeliverable(selectedDeliverable)}
+                </p>
                 <ul>
-                  {selectedDeliverable.reviews.map((review, index) => (
+                  {selectedDeliverable.Review.map((review, index) => (
                     <li key={index}>
-                      <strong>Nota:</strong> {review.grade}
+                      <strong>Grade:</strong> {review.Nota}
                       <br />
-                      <strong>Descriere:</strong> {review.description}
+                      <strong>Description:</strong> {review.ReviewText}
                       <br />
                       <br />
                     </li>
@@ -309,8 +371,8 @@ const ProjectDetails = () => {
                 </ul>
                 <form onSubmit={handleNewReviewSubmit}>
                   <div className="mb-3">
-                  <h4>Adaugă evaluare nouă:</h4>
-                    <label htmlFor="newReviewGrade" className="form-label">Nota:</label>
+                  <h4>Add New Review:</h4>
+                    <label htmlFor="newReviewGrade" className="form-label">Grade:</label>
                     <input
                       type="number"
                       className="form-control"
@@ -324,7 +386,7 @@ const ProjectDetails = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="newReviewDescription" className="form-label">Descriere:</label>
+                    <label htmlFor="newReviewDescription" className="form-label">Description:</label>
                     <textarea
                       className="form-control"
                       id="newReviewDescription"
@@ -333,11 +395,11 @@ const ProjectDetails = () => {
                       onChange={handleNewReviewChange}
                     ></textarea>
                   </div>
-                  <button type="submit" className="btn btn-primary">Adaugă evaluare</button>
+                  <button type="submit" className="btn btn-primary">Add Review</button>
                 </form>
               </React.Fragment>
             ) : (
-              <p>Nu a fost selectat niciun livrabil sau termenul limită nu a fost atins.</p>
+              <p>No deliverable selected or deadline is in the future.</p>
             )}
           </div>
         </div>
