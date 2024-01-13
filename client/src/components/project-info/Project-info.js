@@ -12,7 +12,7 @@ const ProjectDetails = () => {
 
 const calculateMeanGradeForDeliverable = (deliverable) => {
   if (deliverable.Review.length === 0) {
-    return null; // Return null if there are no reviews
+    return "N/A"; // Return null if there are no reviews
   }
 
   const gradesSum = deliverable.Review.reduce((total, review) => total + review.Nota, 0);
@@ -231,7 +231,7 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
       description: '',
     });
 
-    //window.location.reload();
+    window.location.reload();
 
   };
 
