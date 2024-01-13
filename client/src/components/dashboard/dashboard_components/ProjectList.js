@@ -143,7 +143,7 @@ const ProjectList = () => {
 
         </div>
         <div className="jury-projects-container">
-          <h2>Ați fost selectat drept jurat pentru următoarele proiecte:</h2>
+          <h2>Ați fost selectat drept jurat pentru următoarul livrabil:</h2>
           {/* Render the list of projects the user is selected as a jury for */}
           {/* [Proiect 3] [Descriere proiect 3] and so on */}
       
@@ -156,7 +156,7 @@ const ProjectList = () => {
         </div>
 
         <div className="jury-chief-projects-container">
-          <h2>Sunteți jurat șef pentru următoarele proiecte:</h2>
+          <h2>Sunteți jurat șef pentru următoarul livrabil:</h2>
           {/* Render the list of projects the user is chief juror for */}
           {/* [Proiect 4] [Descriere proiect 4] and so on */}
   
