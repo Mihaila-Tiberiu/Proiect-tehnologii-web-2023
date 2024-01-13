@@ -3,34 +3,15 @@ import Livrabil from "../entities/Livrabil.js";
 import { getLivrabileById } from "./LivrabilDa.js";
 import Studenti from "../entities/Studenti.js";
 
-async function createRecenzie(recenzie, livrabilId, idStud){
-    try{
+async function createRecenzie(recenzie, livrabilId){
+   
         const liv = await getLivrabileById(livrabilId);
-
         if(!liv){
             console.log("livrabilul nu exista");
-        }
-        else if(recenzie.LivrabilID.toString() !== livrabilId.toString()){
-            console.log("id livrabil diferit");
-        }
-
-        const stud = Studenti.findAll({
-            where:{
-                StudentID: idStud,
-                esteJurat: 1,
-            },
-        });
-
-        if(!stud){
-            console.log("studentul nu exista sau nu este jurat");
         }
         else{
             return await Recenzie.create(recenzie); // se creeaza review doar daca este jurat
         }
-    }
-    catch(e){
-        throw e;
-    }
 }
 
 async function getReceznii(){

@@ -4,8 +4,8 @@ import { createRecenzie, updateRecenzie } from "../dataAccess/RecenzieDA.js";
 const juryMemberRoutes = express.Router();
 
 // Route to add personal review
-juryMemberRoutes.route('/addOwnReview/:deliverableId/:studId').post(async (req, res) => {
-  return res.json(await createRecenzie(req.body, req.params.deliverableId, req.params.studId));
+juryMemberRoutes.route('/addOwnReview/:deliverableId').post(async (req, res) => {
+  return res.json(await createRecenzie(req.body, req.params.deliverableId));
 });
 
 //modifica un review, verifica daca este jurat
