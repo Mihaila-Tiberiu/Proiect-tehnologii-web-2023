@@ -52,4 +52,40 @@ authRouter.post('/loginProf', (req, res) => {
   );
 });
 
+authRouter.route('/getProfesorById/:profesorId').get((req, res) => {
+  const { profesorId } = req.params;
+
+  db.get(
+    'SELECT * FROM Profesori WHERE ProfesorID = ?',
+    [profesorId],
+    (err, row) => {
+      if (err) {
+        return res.status(500).json({ message: 'Failed to retrieve professor', error: err.message });
+      }
+      if (!row) {
+        return res.status(404).json({ message: 'Professor not found' });
+      }
+      return res.status(200).json({ professor: row });
+    }
+  );
+});
+
+authRouter.route('/getStudentById/:studentId').get((req, res) => {
+  const { studentId } = req.params;
+
+  db.get(
+    'SELECT * FROM Studenti WHERE StudentID = ?',
+    [studentId],
+    (err, row) => {
+      if (err) {
+        return res.status(500).json({ message: 'Failed to retrieve student', error: err.message });
+      }
+      if (!row) {
+        return res.status(404).json({ message: 'Student not found' });
+      }
+      return res.status(200).json({ professor: row });
+    }
+  );
+});
+
 export default authRouter;

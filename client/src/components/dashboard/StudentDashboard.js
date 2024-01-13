@@ -2,12 +2,32 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserInfo from './dashboard_components/InfoUser';
 import ProjectList from './dashboard_components/ProjectList';
+import config from '../../config';
 
 const StudentDashboard = () => {
   const [hasCookie, setHasCookie] = useState(false);
   const [studentID, setStudentID] = useState(null);
+  const [studentName, setStudentName] = useState(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchStudentName = async () => {
+      try {
+        const response = await fetch(config.REACT_APP_BACKEND_URL+`/auth/getStudentById/${studentID}`);
+        const data = await response.json();
+        const { Prenume, Nume } = data.professor;
+        
+        setStudentName(`${Prenume} ${Nume}`);
+      } catch (error) {
+        console.error('Error fetching student name:', error);
+        // Handle error fetching professor name
+      }
+    };
+    if (studentID) {
+      fetchStudentName();
+    }
+  }, [studentID]);
 
   useEffect(() => {
     const checkCookie = () => {
@@ -26,12 +46,6 @@ const StudentDashboard = () => {
 
     checkCookie();
   }, []);
-
-    // Assuming you have a state for user information
-    const user = {
-      username: 'JohnDoe',
-      id: '123',
-    };
   
     const handleLogout = () => {
       // Delete the 'StudentID' cookie by setting its expiration to a date in the past
@@ -48,7 +62,7 @@ const StudentDashboard = () => {
       {hasCookie ? (
         // Content to display if the 'StudentID' cookie is set
         <div>
-        <UserInfo username={user.username} id={user.id} onLogout={handleLogout} />
+        <UserInfo username={studentName} id={studentID} onLogout={handleLogout} />
         <ProjectList />
 
 

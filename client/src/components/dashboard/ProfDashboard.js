@@ -2,12 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserInfo from './dashboard_components/InfoUser';
 import ProfProjectList from './dashboard_components/ProfProjectList';
+import config from '../../config';
 
 const ProfessorDashboard = () => {
+  
   const [hasCookie, setHasCookie] = useState(false);
   const [professorID, setProfessorID] = useState(null);
+  const [professorName, setProfessorName] = useState(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfessorName = async () => {
+      try {
+        const response = await fetch(config.REACT_APP_BACKEND_URL+`/auth/getProfesorById/${professorID}`);
+        const data = await response.json();
+        const { Prenume, Nume } = data.professor;
+        
+        setProfessorName(`${Prenume} ${Nume}`);
+      } catch (error) {
+        console.error('Error fetching professor name:', error);
+        // Handle error fetching professor name
+      }
+    };
+
+    if (professorID) {
+      fetchProfessorName();
+    }
+  }, [professorID]);
 
   useEffect(() => {
     const checkCookie = () => {
@@ -27,11 +49,6 @@ const ProfessorDashboard = () => {
     checkCookie();
   }, []);
 
-  const user = {
-    username: 'JohnDoe',
-    id: '123',
-  };
-
   const handleLogout = () => {
     // Delete the 'StudentID' cookie by setting its expiration to a date in the past
     // Pentru delogare -> vom sterge cookie-ul 
@@ -46,7 +63,7 @@ const ProfessorDashboard = () => {
       {hasCookie ? (
         // Daca exista cookie-ul 'ProfessorID' -> afisam dashboard-ul
         <div>
-          <UserInfo username={user.username} id={user.id} onLogout={handleLogout} />
+          <UserInfo username={professorName} id={professorID} onLogout={handleLogout} />
           <ProfProjectList />
         </div>
       ) : (
