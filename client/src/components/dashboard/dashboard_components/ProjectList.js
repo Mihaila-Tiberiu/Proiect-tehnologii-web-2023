@@ -7,6 +7,40 @@ import axios from 'axios';
 import config from '../../../config';
 
 const ProjectList = () => {
+  const [assignmentMessage, setAssignmentMessage] = useState('');
+
+  const handleButtonClick = (projectId) => {
+    // Retrieve StudentID from the cookie
+    const studentIdFromCookie = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('StudentID='))
+      ?.split('=')[1];
+
+    if (!studentIdFromCookie) {
+      console.error('StudentID not found in the cookie');
+      return;
+    }
+
+    // Prepare the request body
+    const requestBody = {
+      studId: studentIdFromCookie,
+      projId: projectId,
+    };
+
+    // Make the API call
+    axios.put(`${config.REACT_APP_BACKEND_URL}/students/joinProject`, requestBody)
+      .then(response => {
+        // Handle the API response as needed
+        console.log('API response:', response.data);
+
+        setAssignmentMessage(`Te-ai alaturat unui nou proiect!`);
+      })
+      .catch(error => {
+        console.error('Error making API call:', error);
+        // Handle any error scenarios or display error messages
+      });
+  };
+
   const [projects, setProjects] = useState([]);
   const [newProject, setNewProject] = useState({
     projectName: '',
@@ -87,6 +121,12 @@ const ProjectList = () => {
         <div className="left-container">
           <div className="project-list-container">
             <h2>Lista completă a proiectelor:</h2>
+            {/* Display assignment message as a Bootstrap success alert */}
+      {assignmentMessage && (
+        <div className="alert alert-success" role="alert">
+          <p>{assignmentMessage}</p>
+        </div>
+      )}
             {projects.map((project) => (
               <div key={project.ProiectID} className="project-item">
                 <div className="project-info">
@@ -94,6 +134,7 @@ const ProjectList = () => {
                     <h3>{project.NumeProiect}</h3>
                   </Link>
                   <p>{project.Descriere}</p>
+                  <button className="btn btn-secondary" onClick={() => handleButtonClick(project.ProiectID)}>Alătură-te proiectului</button>
                 </div>
                 <span className={`project-icon ${project.IconitaProiect === 2 ? 'add' : ''}`}>
                   {getIconEmoji(project.IconitaProiect)}
@@ -104,6 +145,7 @@ const ProjectList = () => {
   
         {/* Formular pentru adaugarea unui nou proiect */}
 <form className="new-project-form" onSubmit={handleSubmit}>
+  
   <h2>Adaugă un proiect nou:</h2>
   <label htmlFor="projectName">Nume proiect:</label>
   <input
@@ -143,7 +185,7 @@ const ProjectList = () => {
 
         </div>
         <div className="jury-projects-container">
-          <h2>Ați fost selectat drept jurat pentru următoarul livrabil:</h2>
+          <h2>Ați fost selectat drept jurat pentru următoarele proiecte:</h2>
           {/* Render the list of projects the user is selected as a jury for */}
           {/* [Proiect 3] [Descriere proiect 3] and so on */}
       
@@ -156,7 +198,7 @@ const ProjectList = () => {
         </div>
 
         <div className="jury-chief-projects-container">
-          <h2>Sunteți jurat șef pentru următoarul livrabil:</h2>
+          <h2>Sunteți jurat șef pentru următoarele proiecte:</h2>
           {/* Render the list of projects the user is chief juror for */}
           {/* [Proiect 4] [Descriere proiect 4] and so on */}
   
