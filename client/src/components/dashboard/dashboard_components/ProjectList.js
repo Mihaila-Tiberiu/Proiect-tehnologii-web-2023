@@ -34,6 +34,7 @@ const ProjectList = () => {
         console.log('API response:', response.data);
 
         setAssignmentMessage(`Te-ai alaturat unui nou proiect!`);
+        window.location.reload();
       })
       .catch(error => {
         console.error('Error making API call:', error);
@@ -61,6 +62,48 @@ const ProjectList = () => {
       fetchProjects();
     }, []);
   
+    //---------------------------------------------------
+    const [proiectId, setProiectId] = useState(null);
+
+    // Extragem valoarea cookie-ului StudentID
+    const studentIdFromCookie2 = document.cookie
+  .split('; ')
+  .find(row => row.startsWith('StudentID='))
+  ?.split('=')[1];
+
+
+  const getStudentDetailsById = async (studentIdFromCookie2) => {
+    try {
+     
+      const response = await axios.get(`${config.REACT_APP_BACKEND_URL}/auth/getStudentById/${studentIdFromCookie2}`);
+      return response.data.professor.ProiectID;
+
+    } catch (error) {
+      console.error('Error fetching student details:', error);
+      throw error;
+    }
+  };
+
+    const fetchStudentDetails = async () => {
+      if (studentIdFromCookie2) {
+        try {
+          const studentDetails = await getStudentDetailsById(studentIdFromCookie2);
+          setProiectId(studentDetails);
+
+        } catch (error) {
+          console.error('Error getting student details:', error);
+        }
+      }
+    };
+  
+  useEffect(() => {
+    fetchStudentDetails();
+  }, [studentIdFromCookie2]); 
+
+      
+
+
+
     const getIconEmoji = (iconitaProiect) => {
       switch (iconitaProiect) {
         case 0:
@@ -173,17 +216,15 @@ const ProjectList = () => {
 
       <div className="right-container">
       <div className="part-of-projects-container">
-          <h2>Faceți parte din următoarele proiecte:</h2>
-          {/* Render the list of projects the user is part of */}
-          {/* [project 1] [project 1 description] and so on */}
+        <h2>Faceți parte din următorul proiect:</h2>
+        {/* Render the ProiectID value */}
+        {proiectId !== null ? (
+          <p>ID Proiect: {proiectId}</p>
+        ) : (
+          <p>Nu faceți parte din niciun proiect.</p>
+        )}
+      </div>
 
-          <div className="part-of-project-item">
-            [Project 1]
-            <br />
-            [Project 1 description]
-          </div>
-
-        </div>
         <div className="jury-projects-container">
           <h2>Ați fost selectat drept jurat pentru următoarele proiecte:</h2>
           {/* Render the list of projects the user is selected as a jury for */}
