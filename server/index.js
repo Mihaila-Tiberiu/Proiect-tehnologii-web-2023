@@ -6,7 +6,7 @@ import projectRoutes from "./src/routes/projectRoutes.js";
 import authRouter from "./src/routes/authRoutes.js";
 import profRouter from "./src/routes/professorRoutes.js";
 import juryMemberRoutes from "./src/routes/juryMemberRoutes.js";
-import dailyDatabaseCheck from "./src/dataAccess/dailyCheck.js";
+import { dailyDatabaseCheck, dailyJuryCheck } from "./src/dataAccess/dailyCheck.js";
 import cron from "node-cron";
 
 const app = express();
@@ -16,17 +16,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-
-// ROUTES
-// const studentRoutes = require('./src/routes/studentRoutes.js');
-// const juryMemberRoutes = require('./src/routes/juryMemberRoutes.js');
-// const professorRoutes = require('./src/routes/professorRoutes.js');
-// const { default: router } = require('./src/routes/masterRoute.js');
-
 db_init();
 dailyDatabaseCheck();
 
-// // Use the route files
 app.use('/auth', authRouter);
 app.use('/jury', juryMemberRoutes);
 app.use('/professors', profRouter);
@@ -41,8 +33,14 @@ app.listen(PORT, () => {
 
 //ruleaza functia la o anumita ora din zi
 //minut/ ora / zi / * * *
-cron.schedule('42 4 * * *', async () => {
+  cron.schedule('15 0 * * *', async () => {
+    console.log('Scheduler started.');
     await dailyDatabaseCheck();
+    
   });
-  
-console.log('Scheduler started.');
+
+  //verificam daca sunt jurati care nu au pus nota inainte sa alegem alt set de jurati
+  cron.schedule('0 0 * * *', async () => {
+    console.log('Scheduler started.');
+    await dailyJuryCheck();
+  });
