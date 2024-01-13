@@ -4,6 +4,8 @@ import config from '../../config'
 
 const ProjectDetails = () => {
   const [isStudentInProject, setIsStudentInProject] = useState(false);
+  const [idLivrabilStudent, setIdLivrabilStudent] = useState("NA");
+  const [isStudentInLivrabil, setIsStudentInLivrabil] = useState(false);
 
   useEffect(() => {
     // Read StudentID from the cookie
@@ -34,6 +36,7 @@ const ProjectDetails = () => {
       .then(data => {
         // Check if the student is part of the clicked project
         setIsStudentInProject(data.professor.ProiectID == clickedProjectId);
+        setIdLivrabilStudent(data.professor.LivrabilID);
         console.log(data.professor.ProiectID);
         console.log(clickedProjectId);
       })
@@ -149,6 +152,7 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
         .then(data => {
           setSelectedDeliverable(data); // Update the state with the detailed deliverable information
           setSelectedDeliverableId(deliverable.LivrabilID);
+          setIsStudentInLivrabil(deliverable.LivrabilID == idLivrabilStudent);
           console.log('Selected Deliverable ID:', deliverable.LivrabilID);
         })
         .catch(error => console.error('Error fetching deliverable details:', error));
@@ -408,6 +412,7 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
                     </li>
                   ))}
                 </ul>
+                {isStudentInLivrabil && (
                 <form onSubmit={handleNewReviewSubmit}>
                   <div className="mb-3">
                   <h4>Add New Review:</h4>
@@ -436,6 +441,7 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
                   </div>
                   <button type="submit" className="btn btn-primary">Add Review</button>
                 </form>
+                )}
               </React.Fragment>
             ) : (
               <p>No deliverable selected or deadline is in the future.</p>
