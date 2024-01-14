@@ -27,6 +27,7 @@ const ProjectList = () => {
       projId: projectId,
     };
 
+    if (deliverableProjectId != projectId){
     // Make the API call
     axios.put(`${config.REACT_APP_BACKEND_URL}/students/joinProject`, requestBody)
       .then(response => {
@@ -40,6 +41,11 @@ const ProjectList = () => {
         console.error('Error making API call:', error);
         // Handle any error scenarios or display error messages
       });
+    }
+    else {
+      alert("Esti jurat al acestui proiect, nu te poti alatura ca MP :(");
+      window.location.reload();
+    }
   };
 
   const [projects, setProjects] = useState([]);
@@ -62,8 +68,14 @@ const ProjectList = () => {
       fetchProjects();
     }, []);
   
-//---------------------------------------------------
+    //---------------------------------------------------
     const [proiectId, setProiectId] = useState(null);
+    const [projectName, setProjectName] = useState(null);
+    const [deliverableId, setDeliverableId] = useState(null);
+    const [deliverableName, setDeliverableName] = useState(null);
+    const [deliverableProjectId, setDeliverableProjectID] = useState(null);
+    const [deliverableProjectName, setDeliverableProjectName] = useState(null);
+    const [isChief, setIsChief] = useState(0);
 
     // Extragem valoarea cookie-ului StudentID
     const studentIdFromCookie2 = document.cookie
@@ -76,7 +88,7 @@ const ProjectList = () => {
     try {
      
       const response = await axios.get(`${config.REACT_APP_BACKEND_URL}/auth/getStudentById/${studentIdFromCookie2}`);
-      return response.data.professor.ProiectID;
+      return response.data.professor;
 
     } catch (error) {
       console.error('Error fetching student details:', error);
@@ -88,7 +100,9 @@ const ProjectList = () => {
       if (studentIdFromCookie2) {
         try {
           const studentDetails = await getStudentDetailsById(studentIdFromCookie2);
-          setProiectId(studentDetails);
+          setProiectId(studentDetails.ProiectID);
+          setDeliverableId(studentDetails.LivrabilID);
+          setIsChief(studentDetails.esteSef);
 
         } catch (error) {
           console.error('Error getting student details:', error);
@@ -100,61 +114,46 @@ const ProjectList = () => {
     fetchStudentDetails();
   }, [studentIdFromCookie2]); 
 
-  const [esteJurat, setEsteJurat] = useState(null);
-  const getEsteJurat = async (studentIdFromCookie2) => {
-    try {
-      const response = await axios.get(`${config.REACT_APP_BACKEND_URL}/auth/getStudentById/${studentIdFromCookie2}`);
-      return response.data.professor.esteJurat;
-    } catch (error) {
-      console.error('Error fetching student details:', error);
-      throw error;
-    }
-  };
-
-  const fetchStudentDetails2 = async () => {
-    if (studentIdFromCookie2) {
-      try {
-        const studentDetails = await getStudentDetailsById(studentIdFromCookie2);
-        setEsteJurat(studentDetails);
-
-      } catch (error) {
-        console.error('Error getting student details:', error);
-      }
-    }
-  };
-
   useEffect(() => {
-    fetchStudentDetails2();
-  }, [studentIdFromCookie2]); 
-
-  const [esteSef, setEsteSef] = useState(null);
-  const getEsteSef = async (studentIdFromCookie2) => {
-    try {
-      const response = await axios.get(`${config.REACT_APP_BACKEND_URL}/auth/getStudentById/${studentIdFromCookie2}`);
-      return response.data.professor.esteSef;
-    } catch (error) {
-      console.error('Error fetching student details:', error);
-      throw error;
-    }
-  };
-
-  const fetchStudentDetails3 = async () => {
-    if (studentIdFromCookie2) {
-      try {
-        const studentDetails = await getStudentDetailsById(studentIdFromCookie2);
-        setEsteSef(studentDetails);
-
-      } catch (error) {
-        console.error('Error getting student details:', error);
+    // Fetch the project name based on the project ID
+    const fetchProjectData = async () => {
+      if (proiectId !== null) {
+        try {
+          const response = await fetch(config.REACT_APP_BACKEND_URL+`/auth/getProjectName/${proiectId}`);
+          const data = await response.json();
+          setProjectName(data.proiect.NumeProiect); // Assuming the API response has a 'project_name' property
+        } catch (error) {
+          console.error('Fetch project error:', error);
+        }
       }
-    }
-  };
+    };
 
-  useEffect(() => {
-    fetchStudentDetails3();
-  }, [studentIdFromCookie2]); 
+    // Fetch the deliverable name based on the deliverable ID
+    const fetchDeliverableData = async () => {
+      if (deliverableId !== null) {
+        try {
+          const response = await fetch(config.REACT_APP_BACKEND_URL+`/auth/getDeliverable/${deliverableId}`);
+          const data = await response.json();
+          setDeliverableName(data.livrabil.NumeLivrabil);
+          setDeliverableProjectID(data.livrabil.ProiectID);
 
-  //---------------------------------------------------
+            // Additional API call to get the project name for the deliverable's project
+          const projectResponse = await fetch(`${config.REACT_APP_BACKEND_URL}/auth/getProjectName/${data.livrabil.ProiectID}`);
+          const projectData = await projectResponse.json();
+          setDeliverableProjectName(projectData.proiect.NumeProiect);
+        } catch (error) {
+          console.error('Fetch deliverable error:', error);
+        }
+      }
+    };
+
+    // Make the API calls
+    fetchProjectData();
+    fetchDeliverableData();
+  }, [proiectId, deliverableId]);
+      
+
+
 
     const getIconEmoji = (iconitaProiect) => {
       switch (iconitaProiect) {
@@ -269,30 +268,36 @@ const ProjectList = () => {
       <div className="right-container">
       <div className="part-of-projects-container">
         <h2>Faceți parte din următorul proiect:</h2>
+        {/* Render the ProiectID value */}
         {proiectId !== null ? (
-          <p>ID Proiect: {proiectId}</p>
+          <p>Proiect: {projectName}</p>
         ) : (
           <p>Nu faceți parte din niciun proiect.</p>
         )}
       </div>
 
-      <div className="jury-projects-container">
-      <h2>Ați fost selectat drept jurat pentru următoarele proiecte:</h2>
-      {esteJurat !== null ? (
-        <p>Sunteți jurat? {esteJurat === 1 ? 'DA' : 'NU'}</p>
-      ) : (
-        <p>Nu ați fost ales jurat pentru niciun proiect.</p>
-      )}
-    </div>
-
+        <div className="jury-projects-container">
+          <h2>Ați fost selectat drept jurat pentru următoarele livrabile:</h2>
+          {/* Render the ProiectID value */}
+          {deliverableId !== null ? (
+            <p>Livrabil: {deliverableName} din proiectul {deliverableProjectName}</p>
+          ) : (
+            <p>Nu ati fost selectat ca jurat.</p>
+          )}
+      
+          
+          {/* Repeat the above structure for each project the user is selected as a jury for */}
+        </div>
 
         <div className="jury-chief-projects-container">
-          <h2>Ați fost selectat drept jurat șef pentru următoarele proiecte:</h2>
-        {esteSef !== null ? (
-          <p>Sunteți jurat șef? {esteSef === 1 ? 'DA' : 'NU'}</p>
-        ) : (
-          <p>Nu ați fost ales jurat șef pentru niciun proiect.</p>
-        )}
+          <h2>Sunteți jurat șef:</h2>
+          {isChief == 1 ? (
+            <p>Da</p>
+          ) : (
+            <p>Nu</p>
+          )}
+  
+          
 
         </div>
       </div>

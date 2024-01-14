@@ -1,5 +1,5 @@
 import express from "express";
-import { createProiect, getProiecte, updateProiect } from "../dataAccess/ProiectDA.js";
+import { createProiect, getNotaFinala, getProiecte, updateProiect } from "../dataAccess/ProiectDA.js";
 import { createLivrabil, getLivrabileById, updateLivrabil } from "../dataAccess/LivrabilDa.js";
 import { associateStudent } from "../dataAccess/StudentiDA.js";
 import { createRecenzie } from "../dataAccess/RecenzieDA.js";
@@ -47,5 +47,11 @@ projectRoutes.route('/allReviews/:idDeliverable').get(async (req, res) => {
       let idliv = req.params.idDeliverable;
       return res.json(await getLivrabileById(idliv));
 });
+
+//route to get nota finala
+projectRoutes.route('/notaFinala/:idProject').get(async (req, res) => {
+      let id = req.params.idProject;
+      return res.json(await getNotaFinala(id));
+})
 
 export default projectRoutes;

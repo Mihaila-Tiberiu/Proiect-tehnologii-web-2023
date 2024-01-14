@@ -88,4 +88,44 @@ authRouter.route('/getStudentById/:studentId').get((req, res) => {
   );
 });
 
+//
+
+authRouter.route('/getProjectName/:projectId').get((req, res) => {
+  const { projectId } = req.params;
+
+  db.get(
+    'SELECT * FROM Proiect WHERE ProiectID = ?',
+    [projectId],
+    (err, row) => {
+      if (err) {
+        return res.status(500).json({ message: 'Failed to retrieve project', error: err.message });
+      }
+      if (!row) {
+        return res.status(404).json({ message: 'Project not found' });
+      }
+      return res.status(200).json({ proiect: row });
+    }
+  );
+});
+
+authRouter.route('/getDeliverable/:deliverableId').get((req, res) => {
+  const { deliverableId } = req.params;
+
+  db.get(
+    'SELECT * FROM Livrabil WHERE LivrabilID = ?',
+    [deliverableId],
+    (err, row) => {
+      if (err) {
+        return res.status(500).json({ message: 'Failed to retrieve livrabil', error: err.message });
+      }
+      if (!row) {
+        return res.status(404).json({ message: 'livrabil not found' });
+      }
+      return res.status(200).json({ livrabil: row });
+    }
+  );
+});
+
+//
+
 export default authRouter;

@@ -4,8 +4,34 @@ import config from '../../config'
 
 const ProjectDetails = () => {
   const [isStudentInProject, setIsStudentInProject] = useState(false);
-  const [idLivrabilStudent, setIdLivrabilStudent] = useState("NA");
+  const [idLivrabilStudent, setIdLivrabilStudent] = useState("N/A");
   const [isStudentInLivrabil, setIsStudentInLivrabil] = useState(false);
+  const [projectGrade, setProjectGrade] = useState("N/A");
+
+  useEffect(() => {
+    // Retrieve clickedProjectId from localStorage
+    const clickedProjectId = localStorage.getItem("clickedProjectId");
+
+    // Make an API call to fetch the project grade
+    const fetchProjectGrade = async () => {
+      try {
+        const response = await fetch(`${config.REACT_APP_BACKEND_URL}/students/notaFinala/${clickedProjectId}`);
+        const data = await response.json();
+
+        // Update state with the fetched project grade
+        setProjectGrade(data || "N/A");
+      } catch (error) {
+        console.error("Error fetching project grade:", error);
+      }
+    };
+
+    if (clickedProjectId) {
+      // Call the function to fetch project grade
+      fetchProjectGrade();
+    }
+
+  }, []); // No dependencies in the array
+
 
   useEffect(() => {
     // Read StudentID from the cookie
@@ -291,7 +317,7 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
           </button>
             <h2>{project.title}</h2>
             <p>{project.description}</p>
-
+            <h4>Project Grade: {projectGrade}</h4>
             <h4>Deliverables:</h4>
             <ul className="list-group">
               {project.deliverables.map((deliverable) => {
@@ -437,6 +463,7 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
                       name="description"
                       value={newReview.description}
                       onChange={handleNewReviewChange}
+                      required
                     ></textarea>
                   </div>
                   <button type="submit" className="btn btn-primary">Add Review</button>
