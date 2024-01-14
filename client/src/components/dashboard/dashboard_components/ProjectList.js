@@ -62,7 +62,7 @@ const ProjectList = () => {
       fetchProjects();
     }, []);
   
-    //---------------------------------------------------
+//---------------------------------------------------
     const [proiectId, setProiectId] = useState(null);
 
     // Extragem valoarea cookie-ului StudentID
@@ -100,9 +100,61 @@ const ProjectList = () => {
     fetchStudentDetails();
   }, [studentIdFromCookie2]); 
 
-      
+  const [esteJurat, setEsteJurat] = useState(null);
+  const getEsteJurat = async (studentIdFromCookie2) => {
+    try {
+      const response = await axios.get(`${config.REACT_APP_BACKEND_URL}/auth/getStudentById/${studentIdFromCookie2}`);
+      return response.data.professor.esteJurat;
+    } catch (error) {
+      console.error('Error fetching student details:', error);
+      throw error;
+    }
+  };
 
+  const fetchStudentDetails2 = async () => {
+    if (studentIdFromCookie2) {
+      try {
+        const studentDetails = await getStudentDetailsById(studentIdFromCookie2);
+        setEsteJurat(studentDetails);
 
+      } catch (error) {
+        console.error('Error getting student details:', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchStudentDetails2();
+  }, [studentIdFromCookie2]); 
+
+  const [esteSef, setEsteSef] = useState(null);
+  const getEsteSef = async (studentIdFromCookie2) => {
+    try {
+      const response = await axios.get(`${config.REACT_APP_BACKEND_URL}/auth/getStudentById/${studentIdFromCookie2}`);
+      return response.data.professor.esteSef;
+    } catch (error) {
+      console.error('Error fetching student details:', error);
+      throw error;
+    }
+  };
+
+  const fetchStudentDetails3 = async () => {
+    if (studentIdFromCookie2) {
+      try {
+        const studentDetails = await getStudentDetailsById(studentIdFromCookie2);
+        setEsteSef(studentDetails);
+
+      } catch (error) {
+        console.error('Error getting student details:', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchStudentDetails3();
+  }, [studentIdFromCookie2]); 
+
+  //---------------------------------------------------
 
     const getIconEmoji = (iconitaProiect) => {
       switch (iconitaProiect) {
@@ -217,7 +269,6 @@ const ProjectList = () => {
       <div className="right-container">
       <div className="part-of-projects-container">
         <h2>Faceți parte din următorul proiect:</h2>
-        {/* Render the ProiectID value */}
         {proiectId !== null ? (
           <p>ID Proiect: {proiectId}</p>
         ) : (
@@ -225,29 +276,23 @@ const ProjectList = () => {
         )}
       </div>
 
-        <div className="jury-projects-container">
-          <h2>Ați fost selectat drept jurat pentru următoarele proiecte:</h2>
-          {/* Render the list of projects the user is selected as a jury for */}
-          {/* [Proiect 3] [Descriere proiect 3] and so on */}
-      
-          <div className="jury-project-item">
-            [Proiect 3]
-            <br />
-            [Descriere proiect 3]
-          </div>
-          {/* Repeat the above structure for each project the user is selected as a jury for */}
-        </div>
+      <div className="jury-projects-container">
+      <h2>Ați fost selectat drept jurat pentru următoarele proiecte:</h2>
+      {esteJurat !== null ? (
+        <p>Sunteți jurat? {esteJurat === 1 ? 'DA' : 'NU'}</p>
+      ) : (
+        <p>Nu ați fost ales jurat pentru niciun proiect.</p>
+      )}
+    </div>
+
 
         <div className="jury-chief-projects-container">
-          <h2>Sunteți jurat șef pentru următoarele proiecte:</h2>
-          {/* Render the list of projects the user is chief juror for */}
-          {/* [Proiect 4] [Descriere proiect 4] and so on */}
-  
-          <div className="jury-chief-project-item">
-            [Proiect 4]
-            <br />
-            [Descriere proiect 4] 
-          </div>
+          <h2>Ați fost selectat drept jurat șef pentru următoarele proiecte:</h2>
+        {esteSef !== null ? (
+          <p>Sunteți jurat șef? {esteSef === 1 ? 'DA' : 'NU'}</p>
+        ) : (
+          <p>Nu ați fost ales jurat șef pentru niciun proiect.</p>
+        )}
 
         </div>
       </div>
