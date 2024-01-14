@@ -19,7 +19,10 @@ const ProjectDetails = () => {
         const data = await response.json();
 
         // Update state with the fetched project grade
-        setProjectGrade(data || "N/A");
+        if (isNaN(data))
+          setProjectGrade("N/A");
+        else
+          setProjectGrade(data);
       } catch (error) {
         console.error("Error fetching project grade:", error);
       }
