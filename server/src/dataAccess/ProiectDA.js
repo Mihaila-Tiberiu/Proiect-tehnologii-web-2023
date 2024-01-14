@@ -119,13 +119,25 @@ async function getNotaFinala(idProj){
             }
         }
         console.log("note acordate", note);
-    
-        // Calculate the average of the remaining values
-        const medieFinala = note.reduce((acc, val) => acc + val, 0) / note.length;
-        console.log('Medie Finala:', medieFinala.toFixed(2));
 
-        return medieFinala.toFixed(2);
+        if (note.length > 2) {
+            // Sort the array in ascending order
+            const sortedArray = note.sort((a, b) => a - b);
+        
+            // Eliminate the smallest and largest values
+            const trimmedArray = sortedArray.slice(1, -1);
+        
+            // Calculate the average of the remaining values
+            const medieFinala = trimmedArray.reduce((acc, val) => acc + val, 0) / trimmedArray.length;
+        
+            console.log('Sorted Array:', sortedArray);
+            console.log('Trimmed Array:', trimmedArray);
+            console.log('Medie Finala:', medieFinala);
 
+            return medieFinala.toFixed(2);
+        } else {
+            console.log('Not enough elements in the array.');
+        }
 
     }catch(e){
         throw e;
