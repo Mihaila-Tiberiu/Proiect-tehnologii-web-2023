@@ -32,14 +32,14 @@ const LoginAsStudent = () => {
     try {
       const response = await axios.post(config.REACT_APP_BACKEND_URL + "/auth/loginStudent", formData);
       // Set the token in Cookies upon successful login
-      console.log('Login Successful:', response.data);
+      console.log('Autentificare reușită:', response.data);
       document.cookie = `StudentID=${formData.StudentID}; path=/`;
 
       // Redirect to StudentDashboard upon successful login
       navigate('/student-dashboard');
     } catch (error) {
-      console.error('Login Failed:', error);
-      setErrorMessage('Login failed. Please try again.'); // Set error message state
+      console.error('Autentificarea a eșuat:', error);
+      setErrorMessage('Autentificarea a eșuat. Vă rugăm să încercați din nou.'); // Set error message state
     }
   };
 

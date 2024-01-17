@@ -33,14 +33,14 @@ const LoginAsProf = () => {
     try {
       const response = await axios.post(config.REACT_APP_BACKEND_URL + "/auth/loginProf", formData);
       // Set the token in Cookies upon successful login
-      console.log('Login Successful:', response.data);
+      console.log('Autentificare reușită:', response.data);
       document.cookie = `ProfesorID=${formData.ProfesorID}; path=/`;
 
       // Redirect to ProfDashboard upon successful login
       navigate('/prof-dashboard');
     } catch (error) {
-      console.error('Login Failed:', error);
-      setErrorMessage('Login failed. Please try again.'); // Set error message state
+      console.error('Autentificarea a eșuat:', error);
+      setErrorMessage('Autentificarea a eșuat. Vă rugăm să încercați din nou.'); // Set error message state
     }
   };
 

@@ -316,12 +316,12 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
             className="btn btn-secondary mb-2"
             style={{ marginRight: '10px' }}
           >
-            Back to Dashboard
+          Înapoi la Dashboard
           </button>
             <h2>{project.title}</h2>
             <p>{project.description}</p>
-            <h4>Project Grade: {projectGrade}</h4>
-            <h4>Deliverables:</h4>
+            <h4>Nota proiectului: {projectGrade}</h4>
+            <h4>Livrabile:</h4>
             <ul className="list-group">
               {project.deliverables.map((deliverable) => {
                 const today = new Date();
@@ -346,15 +346,15 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
                     {isPastDeadline && meanGrade !== null && ( // Display mean grade if conditions are met
                       <span>
                         <br />
-                        Mean Grade: {meanGrade}
+                        Nota medie: {meanGrade}
                       </span>
                     )}
                     <br />
-                    <span>Description: {deliverable.LinkServer}</span>
+                    <span>Descriere: {deliverable.LinkServer}</span>
                     {deliverable.VideoDemonstrativ && (
                       <span>
                         <br />
-                        Video Link:{' '}
+                        Link video prezentare:{' '}
                         <a href={deliverable.VideoDemonstrativ} target="_blank" rel="noopener noreferrer">
                           {deliverable.VideoDemonstrativ}
                         </a>
@@ -368,9 +368,9 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
             {isStudentInProject && (
               <form onSubmit={handleNewDeliverableSubmit}>
             <br />
-            <h4>Add New Deliverable:</h4>
+            <h4>Adaugă livrabil nou:</h4>
             <div className="mb-3">
-              <label htmlFor="newDeliverableName" className="form-label">Name:</label>
+              <label htmlFor="newDeliverableName" className="form-label">Nume:</label>
               <input
                 type="text"
                 className="form-control"
@@ -382,7 +382,7 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="newDeliverableDescription" className="form-label">Description:</label>
+              <label htmlFor="newDeliverableDescription" className="form-label">Descriere:</label>
               <textarea
                 className="form-control"
                 id="newDeliverableDescription"
@@ -405,7 +405,7 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="newDeliverableVideoLink" className="form-label">Video Link:</label>
+              <label htmlFor="newDeliverableVideoLink" className="form-label">Link video prezentare:</label>
               <input
                 type="url"
                 className="form-control"
@@ -415,7 +415,7 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
                 onChange={handleNewDeliverableChange}
               />
             </div>
-            <button type="submit" className="btn btn-primary">Add Deliverable</button>
+            <button type="submit" className="btn btn-primary">Adaugă livrabil</button>
           </form>
           )}
           </div>
@@ -424,18 +424,18 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
         {/* Right side */}
         <div className="col-md-6">
           <div className="p-4">
-            <h2>Reviews:</h2>
+            <h2>Evaluări:</h2>
             {selectedDeliverable ? (
               <React.Fragment>
                 <p>
-                <strong>Mean Grade:</strong> {calculateMeanGradeForDeliverable(selectedDeliverable)}
+                <strong>Nota medie:</strong> {calculateMeanGradeForDeliverable(selectedDeliverable)}
                 </p>
                 <ul>
                   {selectedDeliverable.Review.map((review, index) => (
                     <li key={index}>
-                      <strong>Grade:</strong> {review.Nota}
+                      <strong>Nota:</strong> {review.Nota}
                       <br />
-                      <strong>Description:</strong> {review.ReviewText}
+                      <strong>Descriere:</strong> {review.ReviewText}
                       <br />
                       <br />
                     </li>
@@ -444,8 +444,8 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
                 {isStudentInLivrabil && (
                 <form onSubmit={handleNewReviewSubmit}>
                   <div className="mb-3">
-                  <h4>Add New Review:</h4>
-                    <label htmlFor="newReviewGrade" className="form-label">Grade:</label>
+                  <h4>Adaugă evaluare nouă:</h4>
+                    <label htmlFor="newReviewGrade" className="form-label">Nota:</label>
                     <input
                       type="number"
                       className="form-control"
@@ -459,7 +459,7 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="newReviewDescription" className="form-label">Description:</label>
+                    <label htmlFor="newReviewDescription" className="form-label">Descriere:</label>
                     <textarea
                       className="form-control"
                       id="newReviewDescription"
@@ -469,12 +469,12 @@ const calculateMeanGradeForDeliverable = (deliverable) => {
                       required
                     ></textarea>
                   </div>
-                  <button type="submit" className="btn btn-primary">Add Review</button>
+                  <button type="submit" className="btn btn-primary">Adaugă evaluare</button>
                 </form>
                 )}
               </React.Fragment>
             ) : (
-              <p>No deliverable selected or deadline is in the future.</p>
+              <p>Nu a fost selectat niciun livrabil sau termenul limită nu a fost incă atins.</p>
             )}
           </div>
         </div>

@@ -34,23 +34,23 @@ const RegisterAsStudent = () => {
 
     try {
       const response = await axios.post(config.REACT_APP_BACKEND_URL+"/auth/createUserStudent", formData);
-      console.log('Registration Successful:', response.data);
-      setSuccessMessage('Registration successful! Your user ID is: '+ response.data.StudentID + '. Keep it in mind to log in.');
+      console.log('Înregistrare reușită:', response.data);
+      setSuccessMessage('Înregistrare reușită! ID-ul dvs. de utilizator este: '+ response.data.StudentID + '. Rețineți-l pentru a vă autentifica.');
     } catch (error) {
-      console.error('Registration Failed:', error);
-      setErrorMessage('Registration failed. Please try again.');
+      console.error('Înregistrarea a eșuat: ', error);
+      setErrorMessage('Înregistrarea a eșuat. Vă rugăm să încercați din nou.');
     }
   };
 
   return (
     <div className="container mt-5">
-      <h2>Student Registration</h2>
+      <h2>Înregistrare Student</h2>
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
       {successMessage && <div className="alert alert-success">{successMessage}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="Prenume" className="form-label">
-            First Name (Prenume)
+            Prenume (First Name)
           </label>
           <input
             type="text"
@@ -64,7 +64,7 @@ const RegisterAsStudent = () => {
         </div>
         <div className="mb-3">
           <label htmlFor="Nume" className="form-label">
-            Last Name (Nume)
+            Nume (Last Name)
           </label>
           <input
             type="text"
@@ -78,7 +78,7 @@ const RegisterAsStudent = () => {
         </div>
         <div className="mb-3">
           <label htmlFor="Parola" className="form-label">
-            Password (Parola)
+            Parola (Password)
           </label>
           <input
             type="password"
@@ -90,10 +90,10 @@ const RegisterAsStudent = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">
-          Register
-        </button>
-        <button className="btn btn-secondary" onClick={handleBack}>Back</button>
+        <div style={{ marginBottom: '20px' }}> 
+        <button type="submit" className="btn btn-primary" style={{ marginRight: '10px' }}> Înregistrare </button>
+        <button className="btn btn-secondary" onClick={handleBack}> Înapoi </button>
+        </div>
       </form>
       
     </div>
